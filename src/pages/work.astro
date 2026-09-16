@@ -1,34 +1,45 @@
 ---
 import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Figure from '../components/Figure.astro';
 import Section from '../components/Section.astro';
 import ProjectRow from '../components/ProjectRow.astro';
 import PlayTable from '../components/PlayTable.astro';
-import { projects } from '../data/profile';
+import { projects, playListings } from '../data/profile';
 
 const title = 'Work';
 const description =
   'Mobile apps Sajon Shrestha has built or shipped. WiPray, We Preach, Classic Tech, Classic Engine, Caro TV Nepal, Dealer Partner, SmartSikshya, Jeewit Bachan, NCash. Flutter, Kotlin and React Native.';
+const words = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+const count = words[projects.length] ?? String(projects.length);
 ---
 
 <Base title={title} description={description}>
-  <section class="hero small">
-    <div class="wrap">
-      <h1 class="display" data-reveal>Work</h1>
-      <p class="lede" data-reveal style="--i:1">
-        Every install figure below is copied from the public Google Play listing. If a project has no link, it has no
-        public listing and I say so rather than guess a number.
-      </p>
-    </div>
-  </section>
+  <Hero
+    small
+    eyebrow="Work"
+    title={`${count[0].toUpperCase()}${count.slice(1)} projects, four years.`}
+    accent="Every number from the store listing."
+    lede="Every install figure below is copied from the public Google Play listing. If a project has no link, it has no public listing and I say so rather than guess a number."
+  >
+    <Fragment slot="actions">
+      <a class="link" href="#play">Store listings<span class="arrow">›</span></a>
+      <a class="link" href="/cv/">Read the CV<span class="arrow">›</span></a>
+    </Fragment>
+  </Hero>
 
-  <Section tight>
+  <Figure value={String(playListings.length)}>
+    products public on Google Play, from an ISP support app past 100,000 installs to a faith social platform for
+    a US client. Flutter, Kotlin and React Native.
+  </Figure>
+
+  <Section id="projects" heading="All projects">
     <div class="rows">
       {projects.map((p, i) => <ProjectRow project={p} index={i} />)}
     </div>
   </Section>
 
-  <Section id="play" tone="soft">
-    <h2 class="h2" data-reveal>On Google Play</h2>
+  <Section id="play" heading="On Google Play" tone="soft">
     <PlayTable />
     <p class="muted more" data-reveal>
       Install brackets are what Google Play shows, checked against the listing. Employer repositories are private, so

@@ -1,0 +1,18 @@
+---
+/** One proof figure per page in the tinted band. The default slot is the note under the number. */
+interface Props {
+  value: string;
+  id?: string;
+  /** Keep it on paper too. Off by default, the CV print does not need it. */
+  print?: boolean;
+}
+
+const { value, id, print = false } = Astro.props;
+---
+
+<section id={id} class:list={['band', 'tint', { 'no-print': !print }]}>
+  <div class="wrap">
+    <p class="figure" data-reveal>{value}</p>
+    <p class="figure-note" data-reveal style="--i:1"><slot /></p>
+  </div>
+</section>

@@ -1,23 +1,24 @@
 ---
-import type { Experience } from '../data/profile';
-
+/**
+ * One record in an `.entries` list, the same two column grid as a project row: title, org line
+ * and period on the left, the body on the right. Slot `org` is the second line, the default slot
+ * is the body (a list, a paragraph).
+ */
 interface Props {
-  entry: Experience;
-  /** Cap the bullet list, used on the home page. */
-  max?: number;
+  title: string;
+  meta?: string;
+  id?: string;
+  index?: number;
 }
 
-const { entry: e, max } = Astro.props;
-const bullets = max ? e.bullets.slice(0, max) : e.bullets;
+const { title, meta, id, index = 0 } = Astro.props;
 ---
 
-<article class="entry" data-reveal>
-  <div class="head">
-    <h3>{e.role}</h3>
-    <span class="meta">{e.period}</span>
+<article class="entry" id={id} data-reveal style={`--i:${Math.min(index, 3)}`}>
+  <div>
+    <h3>{title}</h3>
+    {Astro.slots.has('org') && <p class="org"><slot name="org" /></p>}
+    {meta && <span class="meta">{meta}</span>}
   </div>
-  <p class="org">
-    {e.companyUrl ? <a href={e.companyUrl} rel="noopener">{e.company}</a> : e.company}, {e.place}
-  </p>
-  <ul>{bullets.map((b) => <li>{b}</li>)}</ul>
+  <div><slot /></div>
 </article>

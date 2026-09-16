@@ -1,5 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Figure from '../components/Figure.astro';
 import Section from '../components/Section.astro';
 import ProjectRow from '../components/ProjectRow.astro';
 import { site, projects, experience, services, playListings } from '../data/profile';
@@ -16,39 +18,32 @@ const schema = {
 ---
 
 <Base schema={schema}>
-  <section class="hero">
-    <div class="wrap">
-      <p class="eyebrow" data-reveal style="--i:0">Sajon Shrestha, mobile engineer in Kathmandu</p>
-      <h1 class="display" data-reveal style="--i:1">Flutter on top.<span>Native Kotlin underneath.</span></h1>
-      <p class="lede" data-reveal style="--i:2">
-        Seven products public on Google Play, one past 100,000 installs. I own the parts teams usually outsource.
-        A forked native video player, subscription billing and the release pipeline itself.
-      </p>
-      <div class="actions" data-reveal style="--i:3">
-        <a class="link" href="/work/">See the work<span class="arrow">›</span></a>
-        <a class="link" href={`mailto:${site.email}`}>Email me<span class="arrow">›</span></a>
-      </div>
-      <div class="apps" data-reveal style="--i:4" aria-label="On Google Play">
-        {playListings.map((a) => (
-          <a href={a.url} rel="noopener" target="_blank" title={a.name}>
-            <img class="icon" src={a.icon} alt={a.name} width="96" height="96" decoding="async" />
-          </a>
-        ))}
-        <span class="meta">On Google Play</span>
-      </div>
+  <Hero
+    eyebrow="Sajon Shrestha, mobile engineer in Kathmandu"
+    title="Flutter on top."
+    accent="Native Kotlin underneath."
+    lede="Seven products public on Google Play, one past 100,000 installs. I own the parts teams usually outsource. A forked native video player, subscription billing and the release pipeline itself."
+  >
+    <Fragment slot="actions">
+      <a class="link" href="/work/">See the work<span class="arrow">›</span></a>
+      <a class="link" href={`mailto:${site.email}`}>Email me<span class="arrow">›</span></a>
+    </Fragment>
+    <div class="apps" data-reveal style="--i:4" aria-label="On Google Play">
+      {playListings.map((a) => (
+        <a href={a.url} rel="noopener" target="_blank" title={a.name}>
+          <img class="icon" src={a.icon} alt={a.name} width="96" height="96" decoding="async" />
+        </a>
+      ))}
+      <span class="meta">On Google Play</span>
     </div>
-  </section>
+  </Hero>
 
-  <Section tone="tint">
-    <p class="figure" data-reveal>110,000+</p>
-    <p class="figure-note" data-reveal style="--i:1">
-      installs across four Google Play apps for Nepal's fifth largest internet provider, built and maintained as
-      the only mobile developer.
-    </p>
-  </Section>
+  <Figure value="110,000+">
+    installs across four Google Play apps for Nepal's fifth largest internet provider, built and maintained as the
+    only mobile developer.
+  </Figure>
 
-  <Section id="work">
-    <h2 class="h2" data-reveal>Selected work</h2>
+  <Section id="work" heading="Selected work">
     <div class="rows">
       {featured.map((p, i) => <ProjectRow project={p} compact index={i} />)}
     </div>
@@ -57,8 +52,7 @@ const schema = {
     </p>
   </Section>
 
-  <Section id="take-on" tone="soft">
-    <h2 class="h2" data-reveal>What I take on</h2>
+  <Section id="take-on" heading="What I take on" tone="soft">
     <div class="list2">
       {services.map((s, i) => (
         <div data-reveal style={`--i:${Math.min(i, 3)}`}>
@@ -69,7 +63,7 @@ const schema = {
     </div>
   </Section>
 
-  <Section id="now" label="Now">
+  <Section id="now" heading="Now">
     <div class="prose" data-reveal>
       <p>
         <strong>{now.role}</strong> at <a href={now.companyUrl} rel="noopener">{now.company}</a>, {now.period}.

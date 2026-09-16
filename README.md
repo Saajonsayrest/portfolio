@@ -12,10 +12,17 @@ on a public Google Play listing.
 
 ## Design
 
-Monochrome, type led, two schemes from the system setting (no toggle). Host Grotesk, self-hosted in
-`public/fonts/`, falls back to the system stack. Scroll reveal and page transitions switch off under
-`prefers-reduced-motion`. Rules that keep it from looking like a template: no cards, no pill tags,
-no stat boxes, no gradients, no icons, no timeline dots. One idea per band.
+Monochrome plus one accent, type led. Two schemes: the system setting by default, a toggle in the
+header that stores a choice in `localStorage` (`theme`) and is dropped again once it matches the
+system. Host Grotesk, self-hosted in `public/fonts/`, falls back to the system stack. Scroll reveal
+and page transitions switch off under `prefers-reduced-motion`. Rules that keep it from looking like
+a template: no cards, no pill tags, no stat boxes, no gradients, no decorative icons, no timeline
+dots. One idea per band.
+
+Every page reads the same way: `Hero` (eyebrow, two line display with the second line in the
+accent, lede, actions), one `Figure` band with a single proof number, then `Section` bands with a
+big heading, alternating plain and soft. Records (projects, roles, degree) share one two column grid
+from 48rem up; below that everything stacks. Sizes are fluid and checked down to a 320px phone.
 
 ## Commands
 
@@ -37,9 +44,9 @@ qlmanage -t -s 1200 -o /tmp design/og.svg && sips -c 630 1200 /tmp/og.svg.png --
 ## Files
 
 - `src/layouts/Base.astro`, head with title, description, canonical, Open Graph, JSON-LD Person, fonts, view transitions
-- `src/components/`, `Header`, `Footer`, `Section` (band, optional label column), `ProjectRow`, `Entry`, `PlayTable`
+- `src/components/`, `Header` (nav and theme toggle), `Footer`, `Hero`, `Figure`, `Section` (band, optional heading), `ProjectRow`, `Entry`, `PlayTable`
 - `src/pages/`, one file per route, `index work about cv contact 404`
-- `src/scripts/reveal.ts`, scroll reveal and the header hairline
+- `src/scripts/reveal.ts`, scroll reveal and the header hairline; `src/scripts/theme.ts`, the theme toggle
 - `src/styles/global.css`, the whole design
 - `public/og.png`, the share image, 1200 by 630, source in `design/og.svg`
 - `public/Sajon-Shrestha-CV.pdf`, the downloadable CV, copied by hand from the CV build

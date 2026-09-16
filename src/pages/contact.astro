@@ -1,5 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Figure from '../components/Figure.astro';
 import Section from '../components/Section.astro';
 import { site } from '../data/profile';
 
@@ -8,22 +10,22 @@ const description = 'Contact Sajon Shrestha, Flutter and mobile engineer in Kath
 ---
 
 <Base title={title} description={description}>
-  <section class="hero small">
-    <div class="wrap">
-      <p class="eyebrow" data-reveal>Email is the fastest</p>
-      <h1 data-reveal style="--i:1">
-        <a class="email" href={`mailto:${site.email}`}>{site.email}</a>
-      </h1>
-      <p class="more" data-reveal style="--i:2">
-        <button class="copy" type="button" data-copy={site.email}>Copy address</button>
-      </p>
-      <p class="lede more" data-reveal style="--i:3">
-        I am in Kathmandu, Nepal (UTC+5:45) and work with clients in US time zones.
-      </p>
-    </div>
-  </section>
+  <Hero small eyebrow="Contact" lede="I am in Kathmandu, Nepal (UTC+5:45) and work with clients in US time zones.">
+    <Fragment slot="title">
+      Email is the fastest.
+      <span><a class="email" href={`mailto:${site.email}`}>{site.email}</a></span>
+    </Fragment>
+    <Fragment slot="actions">
+      <a class="link" href={`mailto:${site.email}`}>Email me<span class="arrow">›</span></a>
+      <button class="copy" type="button" data-copy={site.email}>Copy address</button>
+    </Fragment>
+  </Hero>
 
-  <Section label="Elsewhere" tight>
+  <Figure value="UTC+5:45">
+    Kathmandu time. A US morning is my evening, so calls land in that overlap. Email works at any hour.
+  </Figure>
+
+  <Section id="elsewhere" heading="Elsewhere">
     <div class="links-list" data-reveal>
       <a class="link" href={site.links.linkedin} rel="me noopener">LinkedIn<span class="arrow">↗</span></a>
       <a class="link" href={site.links.github} rel="me noopener">GitHub<span class="arrow">↗</span></a>
@@ -31,14 +33,14 @@ const description = 'Contact Sajon Shrestha, Flutter and mobile engineer in Kath
     </div>
   </Section>
 
-  <Section label="For clients" tone="soft">
+  <Section id="clients" heading="For clients" tone="soft">
     <p class="prose" data-reveal>
       Send the app idea, the platforms you need and the date you have in mind. A paragraph is enough to start.
       See <a href="/#take-on">what I take on</a>.
     </p>
   </Section>
 
-  <Section label="For supervisors and admissions">
+  <Section id="admissions" heading="For supervisors and admissions">
     <p class="prose" data-reveal>
       The <a href="/about/#research">research section</a> has my interests and the final year project. The
       <a href="/cv/">CV</a> is on this site. Transcripts and references come on request, by email.

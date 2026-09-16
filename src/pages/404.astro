@@ -1,12 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
 ---
 
 <Base title="Not found" description="This page does not exist.">
-  <section class="hero">
-    <div class="wrap">
-      <h1 class="display" data-reveal>That page is not here.</h1>
-      <p class="more" data-reveal style="--i:1"><a class="link" href="/">Home<span class="arrow">›</span></a></p>
-    </div>
-  </section>
+  <Hero eyebrow="404" title="That page is not here." accent="These are." lede="The address may have changed, or it never existed. Start from one of these.">
+    <Fragment slot="actions">
+      <a class="link" href="/">Home<span class="arrow">›</span></a>
+      <a class="link" href="/work/">Work<span class="arrow">›</span></a>
+      <a class="link" href="/cv/">CV<span class="arrow">›</span></a>
+      <a class="link" href="/contact/">Contact<span class="arrow">›</span></a>
+    </Fragment>
+  </Hero>
 </Base>

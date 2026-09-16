@@ -1,6 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Figure from '../components/Figure.astro';
 import Section from '../components/Section.astro';
+import Entry from '../components/Entry.astro';
 import { summary, research, education, languages } from '../data/profile';
 
 const title = 'About';
@@ -9,49 +12,50 @@ const description =
 ---
 
 <Base title={title} description={description}>
-  <section class="hero small">
-    <div class="wrap">
-      <p class="eyebrow" data-reveal>About</p>
-      <h1 class="display" data-reveal style="--i:1">Mobile engineer since 2022.<span>Kathmandu, working on US time.</span></h1>
-    </div>
-  </section>
+  <Hero small eyebrow="About" title="Mobile engineer since 2022." accent="Kathmandu, working on US time." lede={summary[0]}>
+    <Fragment slot="actions">
+      <a class="link" href="#research">Research<span class="arrow">›</span></a>
+      <a class="link" href="/cv/">Full CV<span class="arrow">›</span></a>
+    </Fragment>
+  </Hero>
 
-  <Section label="In short" tight>
+  <Figure value="12h">
+    the gap between Kathmandu and the US clients I lead mobile delivery for, inside a twenty person team. Client
+    meetings and demos happen on video, in English.
+  </Figure>
+
+  <Section id="in-short" heading="In short">
     <div class="prose" data-reveal>
-      {summary.map((p) => <p>{p}</p>)}
+      {summary.slice(1).map((p) => <p>{p}</p>)}
     </div>
   </Section>
 
-  <Section id="research" label="Research" tone="soft">
+  <Section id="research" heading="Research" tone="soft">
     <div class="prose" data-reveal>
       {research.interests.map((p) => <p>{p}</p>)}
     </div>
-    <div class="entry" data-reveal style="margin-top: 2.5rem">
-      <div class="head">
-        <h3>{research.project.name}</h3>
-        <span class="meta">{research.project.context}</span>
-      </div>
-      <p class="org">{research.project.stack.join(', ')}</p>
-      <ul>{research.project.bullets.map((b) => <li>{b}</li>)}</ul>
-      <p class="muted" style="margin-top: 0.85rem">Supervised by {research.project.supervisor}.</p>
+    <div class="entries" style="margin-top: 2.5rem">
+      <Entry title={research.project.name} meta={research.project.context}>
+        <Fragment slot="org">{research.project.stack.join(', ')}</Fragment>
+        <ul>{research.project.bullets.map((b) => <li>{b}</li>)}</ul>
+        <p class="muted note">Supervised by {research.project.supervisor}.</p>
+      </Entry>
     </div>
   </Section>
 
-  <Section id="education" label="Education">
-    <div class="entry" data-reveal>
-      <div class="head">
-        <h3>{education.degree}</h3>
-        <span class="meta">{education.period}</span>
-      </div>
-      <p class="org">
-        <a href={education.schoolUrl} rel="noopener">{education.school}</a>,
-        <a href={education.universityUrl} rel="noopener">{education.university}</a>, {education.place}
-      </p>
-      <p style="margin-top: 0.85rem">{education.note}</p>
+  <Section id="education" heading="Education">
+    <div class="entries">
+      <Entry title={education.degree} meta={education.period}>
+        <Fragment slot="org">
+          <a href={education.schoolUrl} rel="noopener">{education.school}</a>,
+          <a href={education.universityUrl} rel="noopener">{education.university}</a>, {education.place}
+        </Fragment>
+        <p>{education.note}</p>
+      </Entry>
     </div>
   </Section>
 
-  <Section id="languages" label="Languages" tone="soft">
+  <Section id="languages" heading="Languages" tone="soft">
     <dl class="skills" data-reveal>
       {languages.map((l) => (
         <>

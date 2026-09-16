@@ -1,26 +1,20 @@
 ---
-/** A full-bleed band. With `label`, renders the editorial two-column form: label left, content right. */
+/** A full-bleed band. With `heading`, opens with the big section title the home page uses. */
 interface Props {
   id?: string;
-  label?: string;
+  heading?: string;
   tone?: 'plain' | 'soft' | 'tint';
   rule?: boolean;
   /** No top padding, for the band that follows a page hero. */
   tight?: boolean;
 }
 
-const { id, label, tone = 'plain', rule = false, tight = false } = Astro.props;
+const { id, heading, tone = 'plain', rule = false, tight = false } = Astro.props;
 ---
 
 <section id={id} class:list={['band', { soft: tone === 'soft', tint: tone === 'tint', rule, tight }]}>
   <div class="wrap">
-    {label ? (
-      <div class="cols">
-        <h2 class="label" data-reveal>{label}</h2>
-        <div><slot /></div>
-      </div>
-    ) : (
-      <slot />
-    )}
+    {heading && <h2 class="h2" data-reveal>{heading}</h2>}
+    <slot />
   </div>
 </section>

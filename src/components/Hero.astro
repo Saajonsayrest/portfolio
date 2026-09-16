@@ -1,0 +1,39 @@
+---
+/**
+ * Page opener, the same composition on every route: eyebrow, two line display with the second
+ * line in the accent colour, lede, then a row of actions. Slots: `title` and `lede` replace the
+ * text props when markup is needed, `actions` fills the action row, the default slot goes last.
+ */
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  /** Second display line, set in the accent colour. */
+  accent?: string;
+  lede?: string;
+  /** Shorter top padding, for every page but the home page. */
+  small?: boolean;
+}
+
+const { eyebrow, title, accent, lede, small = false } = Astro.props;
+const hasLede = lede || Astro.slots.has('lede');
+---
+
+<section class:list={['hero', { small }]}>
+  <div class="wrap">
+    {eyebrow && <p class="eyebrow" data-reveal style="--i:0">{eyebrow}</p>}
+    <h1 class="display" data-reveal style="--i:1">
+      <slot name="title">{title}{accent && <span>{accent}</span>}</slot>
+    </h1>
+    {hasLede && (
+      <p class="lede" data-reveal style="--i:2">
+        <slot name="lede">{lede}</slot>
+      </p>
+    )}
+    {Astro.slots.has('actions') && (
+      <div class="actions" data-reveal style="--i:3">
+        <slot name="actions" />
+      </div>
+    )}
+    <slot />
+  </div>
+</section>

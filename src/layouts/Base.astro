@@ -63,7 +63,21 @@ const person = {
     <script type="application/ld+json" set:html={JSON.stringify(person)} />
     {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
 
-    <script is:inline>document.documentElement.classList.add('js');</script>
+    <script is:inline>
+      // Runs before first paint and after every view transition, because the swap resets <html> attributes.
+      (() => {
+        const apply = () => {
+          const root = document.documentElement;
+          root.classList.add('js');
+          let theme = null;
+          try { theme = localStorage.getItem('theme'); } catch {}
+          if (theme === 'light' || theme === 'dark') root.dataset.theme = theme;
+          else delete root.dataset.theme;
+        };
+        apply();
+        document.addEventListener('astro:after-swap', apply);
+      })();
+    </script>
     <ClientRouter />
   </head>
   <body>
@@ -75,6 +89,7 @@ const person = {
     <Footer />
     <script>
       import '../scripts/reveal.ts';
+      import '../scripts/theme.ts';
     </script>
   </body>
 </html>

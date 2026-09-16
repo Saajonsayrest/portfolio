@@ -2,6 +2,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Figure from '../components/Figure.astro';
 import Section from '../components/Section.astro';
 import Entry from '../components/Entry.astro';
 import { site, experience, education, skills, languages } from '../data/profile';
@@ -15,43 +17,53 @@ const hasPdf = fs.existsSync(path.join(process.cwd(), 'public', site.cvFile));
 ---
 
 <Base title={title} description={description}>
-  <section class="hero small">
-    <div class="wrap">
-      <h1 class="display" data-reveal>CV</h1>
-      <p class="lede" data-reveal style="--i:1">
-        {hasPdf ? 'The same content as the PDF, kept in sync.' : 'Print this page for a PDF copy.'} Last updated September 2026.
-      </p>
-      <div class="actions more no-print" data-reveal style="--i:2">
-        {hasPdf ? (
-          <a class="btn" href={site.cvFile}>Download PDF</a>
-        ) : (
-          <button class="btn" type="button" onclick="window.print()">Print or save as PDF</button>
-        )}
-      </div>
-    </div>
-  </section>
+  <Hero small eyebrow="CV" title="Four years of mobile." accent="Everything the PDF says, on one page.">
+    <Fragment slot="lede">
+      {hasPdf ? 'Download the PDF or read it here, the content is the same.' : 'Print this page for a PDF copy.'} Last
+      updated September 2026.
+    </Fragment>
+    <Fragment slot="actions">
+      {hasPdf ? (
+        <a class="btn no-print" href={site.cvFile}>Download PDF</a>
+      ) : (
+        <button class="btn no-print" type="button" onclick="window.print()">Print or save as PDF</button>
+      )}
+      <a class="link no-print" href="/work/">See the work<span class="arrow">›</span></a>
+    </Fragment>
+  </Hero>
 
-  <Section label="Experience" tight>
+  {/* The note names every role in `experience`, oldest first. Add a role there, add it here. */}
+  <Figure value={String(experience.length)}>
+    roles since 2022. An internship, a fintech wallet, Nepal's fifth largest ISP, then a US-owned team where I lead
+    mobile delivery today.
+  </Figure>
+
+  <Section id="experience" heading="Experience">
     <div class="entries">
-      {experience.map((e) => <Entry entry={e} />)}
+      {experience.map((e, i) => (
+        <Entry title={e.role} meta={e.period} index={i}>
+          <Fragment slot="org">
+            {e.companyUrl ? <a href={e.companyUrl} rel="noopener">{e.company}</a> : e.company}, {e.place}
+          </Fragment>
+          <ul>{e.bullets.map((b) => <li>{b}</li>)}</ul>
+        </Entry>
+      ))}
     </div>
   </Section>
 
-  <Section label="Education" tone="soft">
-    <div class="entry" data-reveal>
-      <div class="head">
-        <h3>{education.degree}</h3>
-        <span class="meta">{education.period}</span>
-      </div>
-      <p class="org">
-        <a href={education.schoolUrl} rel="noopener">{education.school}</a>,
-        <a href={education.universityUrl} rel="noopener">{education.university}</a>, {education.place}
-      </p>
-      <p style="margin-top: 0.85rem">{education.note}</p>
+  <Section id="education" heading="Education" tone="soft">
+    <div class="entries">
+      <Entry title={education.degree} meta={education.period}>
+        <Fragment slot="org">
+          <a href={education.schoolUrl} rel="noopener">{education.school}</a>,
+          <a href={education.universityUrl} rel="noopener">{education.university}</a>, {education.place}
+        </Fragment>
+        <p>{education.note}</p>
+      </Entry>
     </div>
   </Section>
 
-  <Section label="Skills">
+  <Section id="skills" heading="Skills">
     <dl class="skills" data-reveal>
       {skills.map((s) => (
         <>
@@ -62,7 +74,7 @@ const hasPdf = fs.existsSync(path.join(process.cwd(), 'public', site.cvFile));
     </dl>
   </Section>
 
-  <Section label="Languages" tone="soft">
+  <Section id="languages" heading="Languages" tone="soft">
     <dl class="skills" data-reveal>
       {languages.map((l) => (
         <>
