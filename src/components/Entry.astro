@@ -1,0 +1,23 @@
+---
+import type { Experience } from '../data/profile';
+
+interface Props {
+  entry: Experience;
+  /** Cap the bullet list, used on the home page. */
+  max?: number;
+}
+
+const { entry: e, max } = Astro.props;
+const bullets = max ? e.bullets.slice(0, max) : e.bullets;
+---
+
+<article class="entry" data-reveal>
+  <div class="head">
+    <h3>{e.role}</h3>
+    <span class="meta">{e.period}</span>
+  </div>
+  <p class="org">
+    {e.companyUrl ? <a href={e.companyUrl} rel="noopener">{e.company}</a> : e.company}, {e.place}
+  </p>
+  <ul>{bullets.map((b) => <li>{b}</li>)}</ul>
+</article>

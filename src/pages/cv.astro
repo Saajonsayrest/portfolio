@@ -1,0 +1,76 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import Entry from '../components/Entry.astro';
+import { site, experience, education, skills, languages } from '../data/profile';
+
+const title = 'CV';
+const description =
+  'CV of Sajon Shrestha, Flutter and mobile engineer. Webpoint Solutions, Classic Tech, Sulav Pay. BE Computer Engineering, Tribhuvan University. Download as PDF.';
+
+// The PDF is copied in by hand from the CV build. Only offer it when it is really there.
+const hasPdf = fs.existsSync(path.join(process.cwd(), 'public', site.cvFile));
+---
+
+<Base title={title} description={description}>
+  <section class="hero small">
+    <div class="wrap">
+      <h1 class="display" data-reveal>CV</h1>
+      <p class="lede" data-reveal style="--i:1">
+        {hasPdf ? 'The same content as the PDF, kept in sync.' : 'Print this page for a PDF copy.'} Last updated September 2026.
+      </p>
+      <div class="actions more no-print" data-reveal style="--i:2">
+        {hasPdf ? (
+          <a class="btn" href={site.cvFile}>Download PDF</a>
+        ) : (
+          <button class="btn" type="button" onclick="window.print()">Print or save as PDF</button>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <Section label="Experience" tight>
+    <div class="entries">
+      {experience.map((e) => <Entry entry={e} />)}
+    </div>
+  </Section>
+
+  <Section label="Education" tone="soft">
+    <div class="entry" data-reveal>
+      <div class="head">
+        <h3>{education.degree}</h3>
+        <span class="meta">{education.period}</span>
+      </div>
+      <p class="org">
+        <a href={education.schoolUrl} rel="noopener">{education.school}</a>,
+        <a href={education.universityUrl} rel="noopener">{education.university}</a>, {education.place}
+      </p>
+      <p style="margin-top: 0.85rem">{education.note}</p>
+    </div>
+  </Section>
+
+  <Section label="Skills">
+    <dl class="skills" data-reveal>
+      {skills.map((s) => (
+        <>
+          <dt>{s.area}</dt>
+          <dd>{s.items}</dd>
+        </>
+      ))}
+    </dl>
+  </Section>
+
+  <Section label="Languages" tone="soft">
+    <dl class="skills" data-reveal>
+      {languages.map((l) => (
+        <>
+          <dt>{l.name}</dt>
+          <dd>{l.level}</dd>
+        </>
+      ))}
+    </dl>
+    <p class="muted more" data-reveal>References are available on request and are never listed here.</p>
+  </Section>
+</Base>

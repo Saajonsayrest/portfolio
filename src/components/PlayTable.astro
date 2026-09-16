@@ -1,0 +1,23 @@
+---
+import { playListings } from '../data/profile';
+---
+
+<table class="play" data-reveal>
+  <thead>
+    <tr><th>App</th><th>Installs</th><th>What it is</th></tr>
+  </thead>
+  <tbody>
+    {playListings.map((a) => (
+      <tr>
+        <td>
+          <span class="app">
+            <img class="icon" src={a.icon} alt="" width="56" height="56" loading="lazy" decoding="async" />
+            <a class="link" href={a.url} rel="noopener" target="_blank">{a.name}<span class="arrow">↗</span></a>
+          </span>
+        </td>
+        <td class="num">{a.installs}</td>
+        <td class="note">{a.note}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>

@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import { site } from '../data/profile';
+
+const title = 'Contact';
+const description = 'Contact Sajon Shrestha, Flutter and mobile engineer in Kathmandu, Nepal. Email, LinkedIn, GitHub, ORCID.';
+---
+
+<Base title={title} description={description}>
+  <section class="hero small">
+    <div class="wrap">
+      <p class="eyebrow" data-reveal>Email is the fastest</p>
+      <h1 data-reveal style="--i:1">
+        <a class="email" href={`mailto:${site.email}`}>{site.email}</a>
+      </h1>
+      <p class="more" data-reveal style="--i:2">
+        <button class="copy" type="button" data-copy={site.email}>Copy address</button>
+      </p>
+      <p class="lede more" data-reveal style="--i:3">
+        I am in Kathmandu, Nepal (UTC+5:45) and work with clients in US time zones.
+      </p>
+    </div>
+  </section>
+
+  <Section label="Elsewhere" tight>
+    <div class="links-list" data-reveal>
+      <a class="link" href={site.links.linkedin} rel="me noopener">LinkedIn<span class="arrow">↗</span></a>
+      <a class="link" href={site.links.github} rel="me noopener">GitHub<span class="arrow">↗</span></a>
+      <a class="link" href={site.links.orcid} rel="me noopener">ORCID<span class="arrow">↗</span></a>
+    </div>
+  </Section>
+
+  <Section label="For clients" tone="soft">
+    <p class="prose" data-reveal>
+      Send the app idea, the platforms you need and the date you have in mind. A paragraph is enough to start.
+      See <a href="/#take-on">what I take on</a>.
+    </p>
+  </Section>
+
+  <Section label="For supervisors and admissions">
+    <p class="prose" data-reveal>
+      The <a href="/about/#research">research section</a> has my interests and the final year project. The
+      <a href="/cv/">CV</a> is on this site. Transcripts and references come on request, by email.
+    </p>
+  </Section>
+</Base>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const btn = document.querySelector<HTMLButtonElement>('[data-copy]');
+    if (!btn) return;
+    const label = btn.textContent;
+    btn.addEventListener('click', async () => {
+      const value = btn.dataset.copy ?? '';
+      try {
+        await navigator.clipboard.writeText(value);
+        btn.textContent = 'Copied';
+        setTimeout(() => (btn.textContent = label), 1500);
+      } catch {
+        window.location.href = `mailto:${value}`;
+      }
+    });
+  });
+</script>

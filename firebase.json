@@ -1,0 +1,24 @@
+{
+  "hosting": {
+    "public": "dist",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "cleanUrls": true,
+    "trailingSlash": true,
+    "redirects": [
+      { "source": "/services", "destination": "/", "type": 301 },
+      { "source": "/services/", "destination": "/", "type": 301 },
+      { "source": "/research", "destination": "/about/", "type": 301 },
+      { "source": "/research/", "destination": "/about/", "type": 301 }
+    ],
+    "headers": [
+      {
+        "source": "/_astro/**",
+        "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+      },
+      {
+        "source": "**/*.html",
+        "headers": [{ "key": "Cache-Control", "value": "public, max-age=600" }]
+      }
+    ]
+  }
+}

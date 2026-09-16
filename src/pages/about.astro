@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import { summary, research, education, languages } from '../data/profile';
+
+const title = 'About';
+const description =
+  'About Sajon Shrestha, Flutter and mobile engineer in Kathmandu. Background, research interests, the RAGE final year project, education at Kantipur Engineering College, Tribhuvan University.';
+---
+
+<Base title={title} description={description}>
+  <section class="hero small">
+    <div class="wrap">
+      <p class="eyebrow" data-reveal>About</p>
+      <h1 class="display" data-reveal style="--i:1">Mobile engineer since 2022.<span>Kathmandu, working on US time.</span></h1>
+    </div>
+  </section>
+
+  <Section label="In short" tight>
+    <div class="prose" data-reveal>
+      {summary.map((p) => <p>{p}</p>)}
+    </div>
+  </Section>
+
+  <Section id="research" label="Research" tone="soft">
+    <div class="prose" data-reveal>
+      {research.interests.map((p) => <p>{p}</p>)}
+    </div>
+    <div class="entry" data-reveal style="margin-top: 2.5rem">
+      <div class="head">
+        <h3>{research.project.name}</h3>
+        <span class="meta">{research.project.context}</span>
+      </div>
+      <p class="org">{research.project.stack.join(', ')}</p>
+      <ul>{research.project.bullets.map((b) => <li>{b}</li>)}</ul>
+      <p class="muted" style="margin-top: 0.85rem">Supervised by {research.project.supervisor}.</p>
+    </div>
+  </Section>
+
+  <Section id="education" label="Education">
+    <div class="entry" data-reveal>
+      <div class="head">
+        <h3>{education.degree}</h3>
+        <span class="meta">{education.period}</span>
+      </div>
+      <p class="org">
+        <a href={education.schoolUrl} rel="noopener">{education.school}</a>,
+        <a href={education.universityUrl} rel="noopener">{education.university}</a>, {education.place}
+      </p>
+      <p style="margin-top: 0.85rem">{education.note}</p>
+    </div>
+  </Section>
+
+  <Section id="languages" label="Languages" tone="soft">
+    <dl class="skills" data-reveal>
+      {languages.map((l) => (
+        <>
+          <dt>{l.name}</dt>
+          <dd>{l.level}</dd>
+        </>
+      ))}
+    </dl>
+    <p class="muted" style="margin-top: 1.5rem" data-reveal>{research.english}</p>
+    <p class="more" data-reveal><a class="link" href="/cv/">Full CV<span class="arrow">›</span></a></p>
+  </Section>
+</Base>

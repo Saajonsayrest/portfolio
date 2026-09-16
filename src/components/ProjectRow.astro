@@ -1,0 +1,37 @@
+---
+import type { Project } from '../data/profile';
+
+interface Props {
+  project: Project;
+  /** Home page form: first two bullets only. */
+  compact?: boolean;
+  index?: number;
+}
+
+const { project: p, compact = false, index = 0 } = Astro.props;
+const bullets = compact ? p.bullets.slice(0, 2) : p.bullets;
+const style = [`--i:${Math.min(index, 3)}`, p.color && `--brand:${p.color}`].filter(Boolean).join(';');
+---
+
+<article class="row" id={p.slug} data-reveal style={style}>
+  <div>
+    <div class="title">
+      {p.icon && <img class="icon" src={p.icon} alt="" width="96" height="96" loading="lazy" decoding="async" />}
+      <h3>{p.name}</h3>
+    </div>
+    <p class="headline">{p.headline}</p>
+    <span class="meta">{p.period} · {p.context}</span>
+    <span class="meta">{p.stack.join(' · ')}</span>
+  </div>
+  <div>
+    <ul>{bullets.map((b) => <li>{b}</li>)}</ul>
+    <div class="foot">
+      {p.link && (
+        <a class="link" href={p.link.url} rel="noopener" target="_blank">{p.link.label}<span class="arrow">↗</span></a>
+      )}
+      {p.installs && <span class="meta">{p.installs} installs</span>}
+      {p.status && <span class="meta">{p.status}</span>}
+      {!p.link && !p.status && <span class="meta">No public listing</span>}
+    </div>
+  </div>
+</article>

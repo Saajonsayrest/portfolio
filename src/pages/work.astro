@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import ProjectRow from '../components/ProjectRow.astro';
+import PlayTable from '../components/PlayTable.astro';
+import { projects } from '../data/profile';
+
+const title = 'Work';
+const description =
+  'Mobile apps Sajon Shrestha has built or shipped. WiPray, We Preach, Classic Tech, Classic Engine, Caro TV Nepal, Dealer Partner, SmartSikshya, Jeewit Bachan, NCash. Flutter, Kotlin and React Native.';
+---
+
+<Base title={title} description={description}>
+  <section class="hero small">
+    <div class="wrap">
+      <h1 class="display" data-reveal>Work</h1>
+      <p class="lede" data-reveal style="--i:1">
+        Every install figure below is copied from the public Google Play listing. If a project has no link, it has no
+        public listing and I say so rather than guess a number.
+      </p>
+    </div>
+  </section>
+
+  <Section tight>
+    <div class="rows">
+      {projects.map((p, i) => <ProjectRow project={p} index={i} />)}
+    </div>
+  </Section>
+
+  <Section id="play" tone="soft">
+    <h2 class="h2" data-reveal>On Google Play</h2>
+    <PlayTable />
+    <p class="muted more" data-reveal>
+      Install brackets are what Google Play shows, checked against the listing. Employer repositories are private, so
+      code for these apps is not public.
+    </p>
+  </Section>
+</Base>

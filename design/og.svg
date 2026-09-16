@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <!-- Source for public/og.png. Square canvas so the macOS renderer keeps scale. The 1200x630 card
+       sits in the middle band (y 285 to 915). Regenerate with the recipe in README.md (a double hyphen
+       is not allowed inside an XML comment, so the command cannot live here). -->
+  <rect width="1200" height="1200" fill="#ffffff"/>
+  <g transform="translate(0 285)">
+    <g font-family="system-ui, Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="600">
+      <text x="96" y="230" font-size="104" letter-spacing="-4" fill="#1d1d1f">Flutter on top.</text>
+      <text x="96" y="340" font-size="104" letter-spacing="-4" fill="#0a7c71">Native Kotlin underneath.</text>
+    </g>
+    <g font-family="system-ui, Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="500" font-size="30" fill="#6e6e73">
+      <text x="96" y="470">Sajon Shrestha, mobile engineer in Kathmandu</text>
+      <text x="96" y="530">sajon.com.np</text>
+    </g>
+  </g>
+</svg>
