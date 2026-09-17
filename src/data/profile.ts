@@ -200,7 +200,7 @@ export const projects: Project[] = [
     context: 'Sulav Pay, consumer fintech, Nepal',
     stack: ['Flutter', 'Riverpod', 'LocalAuth', 'AES'],
     period: '2022 to 2023',
-    icon: '/icons/ncash.png',
+    icon: '/icons/ncash-mark.png',
     color: '#242424', // ncash lib/app/theme/app_colors.dart kColorPrimary
     bullets: [
       'A year of new features and fixes on a live wallet. QR payments and the transaction flow, for a market where most users had never held a banking app before.',
