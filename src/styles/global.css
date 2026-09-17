@@ -1,4 +1,4 @@
-/* Design system. Monochrome plus one accent, type led. Two schemes: the system setting by default, a header toggle stored in localStorage. */
+/* Design system. Monochrome plus one accent, type led. Glass (blur, specular rim, soft shadow) on chrome only: header pill, buttons, toggle, launcher tray. Two schemes: the system setting by default, a header toggle stored in localStorage. */
 
 @font-face {
   font-family: "Host Grotesk";
@@ -24,7 +24,7 @@
   --band: #f5f5f7;
   --fg: #1d1d1f;
   --fg-2: #6e6e73;
-  --line: rgba(0, 0, 0, 0.1);
+  --line: rgba(0, 0, 0, 0.08);
   --line-2: rgba(0, 0, 0, 0.22);
   --accent: #0a7c71;
   --accent-ink: #ffffff;
@@ -33,12 +33,21 @@
   --btn-bg: var(--accent);
   --btn-fg: var(--accent-ink);
   --focus: var(--accent);
+  /* Glass: translucent fill, a specular rim along the top edge, a soft drop shadow. Chrome only. */
+  --glass-bg: rgba(255, 255, 255, 0.66);
+  --glass-rim: rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 1px 1px rgba(0, 0, 0, 0.04), 0 10px 30px rgba(0, 0, 0, 0.12);
   --sans: "Host Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --max: 70rem;
   --measure: 42rem;
   --gutter: clamp(1.25rem, 5vw, 3rem);
+  --radius-pill: 999px;
+  --radius-lg: 1.5rem;
   --header: 3.25rem;
+  --header-inset: 0.75rem;
+  /* The pill floats, so main pads by inset + pill + the same inset again as clearance. */
+  --header-offset: calc(var(--header) + 2 * var(--header-inset));
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 @media (prefers-color-scheme: dark) {
@@ -48,12 +57,15 @@
     --band: #1d1d1f;
     --fg: #f5f5f7;
     --fg-2: #86868b;
-    --line: rgba(255, 255, 255, 0.14);
+    --line: rgba(255, 255, 255, 0.12);
     --line-2: rgba(255, 255, 255, 0.3);
     --accent: #4dd4c4;
     --accent-ink: #00201c;
     --sun: block;
     --moon: none;
+    --glass-bg: rgba(28, 28, 30, 0.6);
+    --glass-rim: rgba(255, 255, 255, 0.12);
+    --glass-shadow: 0 1px 1px rgba(0, 0, 0, 0.5), 0 12px 34px rgba(0, 0, 0, 0.55);
   }
 }
 :root[data-theme="dark"] {
@@ -62,12 +74,15 @@
   --band: #1d1d1f;
   --fg: #f5f5f7;
   --fg-2: #86868b;
-  --line: rgba(255, 255, 255, 0.14);
+  --line: rgba(255, 255, 255, 0.12);
   --line-2: rgba(255, 255, 255, 0.3);
   --accent: #4dd4c4;
   --accent-ink: #00201c;
   --sun: block;
   --moon: none;
+  --glass-bg: rgba(28, 28, 30, 0.6);
+  --glass-rim: rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 1px 1px rgba(0, 0, 0, 0.5), 0 12px 34px rgba(0, 0, 0, 0.55);
 }
 
 /* Reset */
@@ -91,7 +106,8 @@ p + p { margin-top: 1em; }
 ul, ol { margin: 0; padding: 0; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
-[id] { scroll-margin-top: calc(var(--header) + 1rem); }
+[id] { scroll-margin-top: calc(var(--header-offset) + 1rem); }
+main { padding-top: var(--header-offset); }
 
 /* Type. Fluid sizes that still fit a 320px phone at the small end. */
 .display { font-size: clamp(2.25rem, 0.5rem + 6vw, 5.5rem); letter-spacing: -0.035em; line-height: 1.02; }
@@ -120,15 +136,22 @@ a { color: inherit; text-decoration: none; }
 .link:hover .arrow { transform: translateX(4px); }
 .btn {
   display: inline-flex; align-items: center; gap: 0.4em;
-  min-height: 2.75rem; padding: 0.7em 1.3em; border-radius: 999px;
+  min-height: 2.75rem; padding: 0.7em 1.3em; border-radius: var(--radius-pill);
   background: var(--btn-bg); color: var(--btn-fg);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   font-size: 0.9375rem; font-weight: 500; line-height: 1.2;
-  transition: opacity 0.2s, transform 0.2s var(--ease);
+  transition: opacity 0.2s, transform 0.2s var(--ease), box-shadow 0.2s;
 }
 .btn:hover { opacity: 0.82; }
 .btn:active { transform: scale(0.98); }
-.btn.ghost { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 1px var(--line-2); }
-.btn.ghost:hover { opacity: 1; box-shadow: inset 0 0 0 1px var(--fg); }
+/* Ghost is a true glass capsule: its own blur, never nested inside another blurred surface. */
+.btn.ghost {
+  background: var(--glass-bg); color: var(--fg);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  backdrop-filter: saturate(160%) blur(14px);
+  box-shadow: inset 0 1px 0 var(--glass-rim), inset 0 0 0 1px var(--line);
+}
+.btn.ghost:hover { opacity: 1; box-shadow: inset 0 1px 0 var(--glass-rim), inset 0 0 0 1px var(--fg); }
 
 /* Layout */
 .wrap { max-width: var(--max); margin-inline: auto; padding-inline: max(var(--gutter), env(safe-area-inset-left)) max(var(--gutter), env(safe-area-inset-right)); }
@@ -139,31 +162,43 @@ a { color: inherit; text-decoration: none; }
 .band.tight { padding-top: 0; }
 .band .h2 { margin-bottom: clamp(1.75rem, 4vw, 3rem); }
 .actions { display: flex; gap: 1rem 2rem; flex-wrap: wrap; align-items: center; }
-.skip { position: absolute; left: -999px; top: 0; padding: 0.5rem 1rem; background: var(--fg); color: var(--bg); z-index: 20; }
+.skip { position: absolute; left: -999px; top: 0; padding: 0.5rem 1rem; background: var(--fg); color: var(--bg); z-index: 40; }
 .skip:focus { left: 0.5rem; top: 0.5rem; }
 
-/* Header and footer */
+/* Header: a floating glass pill. Fixed, hugs its content, centred by auto margins (a transform on a
+   blurred fixed element flickers in Safari). No overflow clip, so focus rings stay whole. */
 .site-header {
-  position: sticky; top: 0; z-index: 10;
-  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  position: fixed; top: var(--header-inset);
+  left: env(safe-area-inset-left, 0px); right: env(safe-area-inset-right, 0px);
+  width: fit-content; max-width: calc(100% - 2 * var(--header-inset)); margin-inline: auto;
+  z-index: 30;
+  border-radius: var(--radius-pill);
+  background: var(--glass-bg);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.3s, background-color 0.3s;
+  box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-rim), inset 0 0 0 1px var(--line);
+  transition: background-color 0.3s, box-shadow 0.3s;
 }
-.site-header.scrolled { border-bottom-color: var(--line); }
-.site-header .wrap { display: flex; align-items: center; justify-content: space-between; height: var(--header); gap: 1rem; }
+.site-header .wrap {
+  display: flex; align-items: center; gap: 1rem; height: var(--header);
+  max-width: none; padding-inline: clamp(1rem, 3vw, 1.5rem);
+  transition: height 0.3s var(--ease);
+}
+.site-header.scrolled .wrap { height: calc(var(--header) - 0.5rem); }
 .brand { font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; }
 .site-tools { display: flex; align-items: center; gap: clamp(0.75rem, 2vw, 1.25rem); min-width: 0; }
 .site-nav { display: flex; align-items: center; gap: clamp(0.9rem, 3vw, 2rem); font-size: 0.9375rem; white-space: nowrap; }
 .site-nav a { color: var(--fg-2); transition: color 0.2s; }
 .site-nav a:hover, .site-nav a[aria-current="page"] { color: var(--fg); }
+/* The toggle sits inside the blurred pill, so it gets a rim and ring but no blur of its own. */
 .theme {
   display: inline-flex; align-items: center; justify-content: center; flex: none;
-  width: 2.5rem; height: 2.5rem; margin-right: -0.5rem; border-radius: 999px;
-  color: var(--fg-2); transition: color 0.2s, background-color 0.2s;
+  width: 2.25rem; height: 2.25rem; border-radius: var(--radius-pill);
+  color: var(--fg-2);
+  box-shadow: inset 0 0 0 1px var(--line), inset 0 1px 0 var(--glass-rim);
+  transition: color 0.2s, background-color 0.2s;
 }
-.theme:hover { color: var(--fg); background: var(--band); }
+.theme:hover { color: var(--fg); background: color-mix(in srgb, var(--fg) 8%, transparent); }
 .theme svg { width: 1.125rem; height: 1.125rem; }
 .theme .sun { display: var(--sun); }
 .theme .moon { display: var(--moon); }
@@ -172,8 +207,9 @@ a { color: inherit; text-decoration: none; }
   .site-nav { font-size: 0.875rem; gap: 0.75rem; }
 }
 @media (max-width: 22.5rem) {
+  .site-header { top: 0.5rem; max-width: calc(100% - 1rem); }
+  .site-header .wrap { gap: 0.75rem; padding-inline: 0.75rem; }
   .brand .last { display: none; }
-  .site-header .wrap { gap: 0.75rem; }
   .site-tools { gap: 0.5rem; }
   .site-nav { font-size: 0.8125rem; gap: 0.6rem; }
 }
@@ -183,8 +219,20 @@ a { color: inherit; text-decoration: none; }
 .site-footer a:hover { color: var(--fg); }
 
 /* Hero. Same composition on every page: eyebrow, two line display, lede, actions. The home page adds the app strip. */
-.hero { padding-block: clamp(5rem, 14vw, 10rem) clamp(4rem, 10vw, 7rem); }
+.hero { position: relative; z-index: 0; padding-block: clamp(5rem, 14vw, 10rem) clamp(4rem, 10vw, 7rem); }
 .hero.small { padding-block: clamp(4rem, 10vw, 7rem) clamp(3.5rem, 8vw, 6rem); }
+/* One soft accent glow behind the hero, reaching up to the viewport top so the pill has something to refract.
+   z-index 0 on .hero keeps it behind this band only, never under the next one. */
+.hero::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  inset: calc(-1 * var(--header-offset)) 0 0;
+  background: radial-gradient(
+    70% 60% at 50% 0%,
+    color-mix(in srgb, var(--accent) 16%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 6%, transparent) 45%,
+    transparent 75%
+  );
+}
 .hero .display { margin-block: 1rem 1.5rem; max-width: 24ch; }
 .hero .lede { margin-bottom: 2rem; }
 .hero .wrap > :last-child { margin-bottom: 0; }
@@ -192,10 +240,19 @@ a { color: inherit; text-decoration: none; }
 
 /* App icons, the real launcher icons from each repo */
 .icon { display: block; flex: none; width: var(--icon, 3.5rem); height: var(--icon, 3.5rem); border-radius: 22.5%; background: var(--band); box-shadow: inset 0 0 0 1px var(--line); object-fit: cover; }
-.apps { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-top: 2.75rem; }
+/* Launcher tray, dock style: the one glass surface that holds content, and it holds only icons. */
+.apps {
+  display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-top: 2.75rem;
+  width: fit-content; max-width: 100%; padding: 0.85rem 1rem;
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: saturate(160%) blur(16px);
+  backdrop-filter: saturate(160%) blur(16px);
+  box-shadow: inset 0 1px 0 var(--glass-rim), inset 0 0 0 1px var(--line);
+}
 .apps a { display: block; border-radius: 22.5%; transition: transform 0.3s var(--ease); }
 .apps .icon { --icon: 3rem; }
-.apps .meta { flex-basis: 100%; margin-top: 0.15rem; }
+.apps-note { margin-top: 0.75rem; }
 
 /* Proof figure. One per page, tinted band. */
 .figure { font-size: clamp(3.25rem, 1rem + 11vw, 10rem); font-weight: 600; letter-spacing: -0.05em; line-height: 0.95; font-variant-numeric: tabular-nums; color: var(--accent); overflow-wrap: anywhere; }
@@ -256,8 +313,6 @@ dl.skills dd { margin: 0; color: var(--fg-2); }
 
 /* Contact */
 .display .email { font-size: clamp(1.5rem, 0.5rem + 4.5vw, 4rem); letter-spacing: -0.03em; line-height: 1.1; overflow-wrap: anywhere; color: var(--accent); }
-.copy { font-size: 0.9375rem; color: var(--fg-2); transition: color 0.2s; }
-.copy:hover { color: var(--fg); }
 
 /* Hover effects only where a pointer can hover, so touch screens never get a stuck state. */
 @media (hover: hover) {
@@ -280,12 +335,23 @@ html.js [data-reveal].in { opacity: 1; transform: none; }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }
 
+/* Glass fallbacks target the surfaces, not :root: a :root override loses to the dark token blocks on specificity. */
+@media (prefers-reduced-transparency: reduce) {
+  .site-header, .btn.ghost, .apps { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  /* Plain token, not color-mix(): an engine without backdrop-filter is older than color-mix() too. */
+  .site-header, .btn.ghost, .apps { background: var(--band); }
+}
+
 /* Print, used by the CV page */
 @media print {
   @page { margin: 18mm; }
   .site-header, .site-footer, .no-print { display: none !important; }
   body { color: #000; background: #fff; font-size: 10.5pt; }
+  main { padding-top: 0; }
   .hero, .hero.small { padding-block: 0 1rem; }
+  .hero::before { display: none; }
   .band, .band.soft, .band.tint { padding-block: 1rem; background: none; }
   .band .h2 { margin-bottom: 0.75rem; }
   .entry { grid-template-columns: 1fr; gap: 0.25rem; padding-block: 0.75rem; }
