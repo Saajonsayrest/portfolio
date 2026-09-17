@@ -33,17 +33,23 @@
   --btn-bg: var(--accent);
   --btn-fg: var(--accent-ink);
   --focus: var(--accent);
-  /* Glass: a fill that fades top to bottom, a 1px rim lit from the top left, a gloss across the top,
-     a specular that follows the pointer, a real drop shadow. Chrome only. */
-  --glass-fill: rgba(255, 255, 255, 0.58);
-  --glass-fill-2: rgba(255, 255, 255, 0.36);
-  --glass-rim: rgba(255, 255, 255, 0.95);
-  --glass-rim-2: rgba(255, 255, 255, 0.3);
-  --glass-edge: rgba(0, 0, 0, 0.07);
-  --glass-gloss: rgba(255, 255, 255, 0.7);
-  --glass-spec: rgba(255, 255, 255, 0.75);
-  --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 12px 40px -8px rgba(0, 0, 0, 0.2);
-  --glass-blur: 24px;
+  /* Glass, Apple's Liquid Glass: clear, not frosted. A barely there fill with a sheen across the top,
+     a light blur so what is behind stays legible, a thick lit edge (rim, an inner band of bent light,
+     a shadow on the far side for slab depth), a faint chromatic fringe, a pointer specular, a real drop
+     shadow. The -lift pair is the scrolled pill. Chrome only. */
+  --glass-fill: rgba(255, 255, 255, 0.28);
+  --glass-fill-lift: rgba(255, 255, 255, 0.66);
+  --glass-sheen: rgba(255, 255, 255, 0.55);
+  --glass-rim: rgba(255, 255, 255, 0.98);
+  --glass-rim-2: rgba(255, 255, 255, 0.35);
+  --glass-edge: rgba(0, 0, 0, 0.06);
+  --glass-inner: rgba(255, 255, 255, 0.6);
+  --glass-depth: rgba(0, 0, 0, 0.1);
+  --glass-spec: rgba(255, 255, 255, 0.8);
+  --glass-chroma: 22%;
+  --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 14px 36px -10px rgba(0, 0, 0, 0.18);
+  --glass-shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.06), 0 18px 48px -10px rgba(0, 0, 0, 0.26);
+  --glass-blur: 6px;
   --glow: 28%;
   --sans: "Host Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -71,14 +77,19 @@
     --accent-ink: #00201c;
     --sun: block;
     --moon: none;
-    --glass-fill: rgba(34, 34, 38, 0.55);
-    --glass-fill-2: rgba(18, 18, 22, 0.45);
-    --glass-rim: rgba(255, 255, 255, 0.38);
-    --glass-rim-2: rgba(255, 255, 255, 0.07);
-    --glass-edge: rgba(255, 255, 255, 0.06);
-    --glass-gloss: rgba(255, 255, 255, 0.1);
-    --glass-spec: rgba(255, 255, 255, 0.22);
-    --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 16px 48px -8px rgba(0, 0, 0, 0.7);
+    --glass-fill: rgba(28, 28, 32, 0.35);
+    --glass-fill-lift: rgba(22, 22, 26, 0.7);
+    --glass-sheen: rgba(255, 255, 255, 0.1);
+    --glass-rim: rgba(255, 255, 255, 0.55);
+    --glass-rim-2: rgba(255, 255, 255, 0.1);
+    --glass-edge: rgba(255, 255, 255, 0.05);
+    --glass-inner: rgba(255, 255, 255, 0.14);
+    --glass-depth: rgba(0, 0, 0, 0.45);
+    --glass-spec: rgba(255, 255, 255, 0.26);
+    --glass-chroma: 16%;
+    --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 16px 44px -10px rgba(0, 0, 0, 0.65);
+    --glass-shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.6), 0 20px 56px -10px rgba(0, 0, 0, 0.8);
+    --glass-blur: 8px;
     --glow: 30%;
   }
 }
@@ -94,14 +105,19 @@
   --accent-ink: #00201c;
   --sun: block;
   --moon: none;
-  --glass-fill: rgba(34, 34, 38, 0.55);
-  --glass-fill-2: rgba(18, 18, 22, 0.45);
-  --glass-rim: rgba(255, 255, 255, 0.38);
-  --glass-rim-2: rgba(255, 255, 255, 0.07);
-  --glass-edge: rgba(255, 255, 255, 0.06);
-  --glass-gloss: rgba(255, 255, 255, 0.1);
-  --glass-spec: rgba(255, 255, 255, 0.22);
-  --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 16px 48px -8px rgba(0, 0, 0, 0.7);
+  --glass-fill: rgba(28, 28, 32, 0.35);
+  --glass-fill-lift: rgba(22, 22, 26, 0.7);
+  --glass-sheen: rgba(255, 255, 255, 0.1);
+  --glass-rim: rgba(255, 255, 255, 0.55);
+  --glass-rim-2: rgba(255, 255, 255, 0.1);
+  --glass-edge: rgba(255, 255, 255, 0.05);
+  --glass-inner: rgba(255, 255, 255, 0.14);
+  --glass-depth: rgba(0, 0, 0, 0.45);
+  --glass-spec: rgba(255, 255, 255, 0.26);
+  --glass-chroma: 16%;
+  --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 16px 44px -10px rgba(0, 0, 0, 0.65);
+  --glass-shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.6), 0 20px 56px -10px rgba(0, 0, 0, 0.8);
+  --glass-blur: 8px;
   --glow: 30%;
 }
 
@@ -181,17 +197,28 @@ a { color: inherit; text-decoration: none; }
 .skip { position: absolute; left: -999px; top: 0; padding: 0.5rem 1rem; background: var(--fg); color: var(--bg); z-index: 40; }
 .skip:focus { left: 0.5rem; top: 0.5rem; }
 
-/* Glass recipe, shared by the header pill, ghost buttons and the launcher tray. Four layers:
-   the element carries the fill, the blur, a gloss along the top (inset shadow) and the drop shadow;
-   ::before is a 1px rim drawn as a gradient and masked to the border ring, lit from the top left;
-   ::after is a specular that follows the pointer (glass.ts writes --mx/--my) and fades in on hover.
-   Both pseudos sit at z-index -1 inside the element's own stacking context, under its content. */
+/* Glass recipe, shared by the header pill, ghost buttons and the launcher tray. Apple's Liquid Glass
+   is a clear slab, so the work is at the edges, not in the blur. The element carries a thin fill
+   (background-color, so it can animate) with a sheen fading from the top, a light blur, and a stack of
+   inset shadows that draw a thick edge: a second highlight line inside the rim top and bottom, a wide
+   band of bent light along every edge, and a shadow on the far side that gives the slab depth. ::before
+   is the 1px rim masked to the border ring: bright at the lit and the opposite corner (light enters at
+   one edge and leaves at the other), clear along the sides, where a faint hue sweep underneath reads as
+   dispersion. ::after is a specular that follows the pointer (glass.ts writes --mx/--my) and fades in
+   on hover. Both pseudos sit at z-index -1 inside the element's own stacking context, under content. */
 .site-header, .btn.ghost, .apps {
   isolation: isolate;
-  background: linear-gradient(180deg, var(--glass-fill), var(--glass-fill-2));
-  -webkit-backdrop-filter: saturate(180%) blur(var(--glass-blur));
-  backdrop-filter: saturate(180%) blur(var(--glass-blur));
-  box-shadow: 0 0 0 1px var(--glass-edge), inset 0 12px 24px -12px var(--glass-gloss), var(--glass-shadow);
+  background-color: var(--glass-fill);
+  background-image: linear-gradient(180deg, var(--glass-sheen), transparent 55%);
+  -webkit-backdrop-filter: saturate(170%) blur(var(--glass-blur));
+  backdrop-filter: saturate(170%) blur(var(--glass-blur));
+  box-shadow:
+    0 0 0 1px var(--glass-edge),
+    inset 0 1px 0 var(--glass-rim-2),
+    inset 0 -1px 0 var(--glass-rim-2),
+    inset 0 0 16px -4px var(--glass-inner),
+    inset 0 -12px 20px -14px var(--glass-depth),
+    var(--glass-shadow);
 }
 .site-header::before, .btn.ghost::before, .apps::before,
 .site-header::after, .btn.ghost::after, .apps::after {
@@ -199,14 +226,23 @@ a { color: inherit; text-decoration: none; }
 }
 .site-header::before, .btn.ghost::before, .apps::before {
   padding: 1px;
-  background: linear-gradient(135deg, var(--glass-rim) 0%, var(--glass-rim-2) 38%, var(--glass-rim-2) 62%, var(--glass-rim) 100%);
+  /* Plain rim first: an engine with backdrop-filter but no color-mix() (Safari 15 to 16.1) drops the
+     two layer declaration below and keeps this one. */
+  background: linear-gradient(135deg, var(--glass-rim) 0%, var(--glass-rim-2) 30%, var(--glass-rim-2) 70%, var(--glass-rim) 100%);
+  background:
+    linear-gradient(135deg, var(--glass-rim) 0%, var(--glass-rim-2) 26%, transparent 42%, transparent 58%, var(--glass-rim-2) 74%, var(--glass-rim) 100%),
+    conic-gradient(from 160deg,
+      color-mix(in srgb, #5ac8fa var(--glass-chroma), transparent),
+      color-mix(in srgb, #ff2d92 var(--glass-chroma), transparent) 35%,
+      color-mix(in srgb, #ffd60a var(--glass-chroma), transparent) 65%,
+      color-mix(in srgb, #5ac8fa var(--glass-chroma), transparent));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
 }
 .site-header::after, .btn.ghost::after, .apps::after {
-  background: radial-gradient(9rem circle at var(--mx, 50%) var(--my, 0%), var(--glass-spec), transparent 62%);
+  background: radial-gradient(8rem circle at var(--mx, 50%) var(--my, 0%), var(--glass-spec), transparent 60%);
   opacity: 0;
   transition: opacity 0.45s var(--ease);
 }
@@ -222,9 +258,16 @@ a { color: inherit; text-decoration: none; }
   width: fit-content; max-width: calc(100% - 2 * var(--header-inset)); margin-inline: auto;
   z-index: 30;
   border-radius: var(--radius-pill);
-  transition: box-shadow 0.4s var(--ease);
+  transition: box-shadow 0.4s var(--ease), background-color 0.4s var(--ease),
+    -webkit-backdrop-filter 0.4s var(--ease), backdrop-filter 0.4s var(--ease);
 }
-.site-header.scrolled { box-shadow: 0 0 0 1px var(--glass-edge), inset 0 12px 24px -12px var(--glass-gloss), 0 2px 4px rgba(0, 0, 0, 0.06), 0 18px 48px -10px rgba(0, 0, 0, 0.28); }
+/* Liquid Glass adapts to what is under it: clear over the hero, milkier and more blurred once body
+   text scrolls beneath, so the nav stays legible. */
+.site-header.scrolled {
+  --glass-fill: var(--glass-fill-lift);
+  --glass-blur: 18px;
+  --glass-shadow: var(--glass-shadow-lift);
+}
 .site-header .wrap {
   display: flex; align-items: center; gap: 0.75rem; height: var(--header);
   max-width: none; padding-inline: clamp(0.9rem, 2.5vw, 1.25rem) clamp(0.5rem, 1.5vw, 0.625rem);

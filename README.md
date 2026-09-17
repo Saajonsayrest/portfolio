@@ -137,7 +137,10 @@ choice; the number stays out of the CV PDF and out of this file.
 
 **Design.** Monochrome plus one accent, type led, one idea per band. No cards, no stat boxes, no
 decorative icons, no timeline dots. Content bands stay flat; the header pill, ghost buttons and
-the launcher tray share one glass recipe in `global.css` (blur, a gradient rim lit from the top
-left, a gloss, a specular that follows the pointer, a drop shadow), and each hero has two slow
-drifting accent glows behind it so the glass has colour to refract. Nothing else is translucent.
+the launcher tray share one glass recipe in `global.css`, modelled on Apple's Liquid Glass: a clear
+slab, not frosted glass. A thin fill with a sheen, a light blur, a thick lit edge (rim, an inner band
+of bent light, a shadow on the far side), a faint chromatic fringe, a specular that follows the
+pointer, a drop shadow. The header pill turns milkier and blurs more once text scrolls beneath it.
+Each hero has two slow drifting accent glows behind it so the glass has colour to refract. Nothing
+else is translucent.
 Sizes are fluid and checked down to a 320px phone.
