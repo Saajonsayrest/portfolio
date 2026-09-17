@@ -29,8 +29,9 @@
   --accent: #4dd4c4;
   --sun: block;
   --moon: none;
-  /* Primary button is the foreground on the canvas, not the accent: one high contrast pill. */
-  --btn-bg: var(--fg);
+  /* Primary button is the accent with the canvas colour for text, so one pair serves both schemes:
+     near-black on light teal here, white on deep teal in light. */
+  --btn-bg: var(--accent);
   --btn-fg: var(--bg);
   --focus: var(--accent);
   /* Glass, Apple's Liquid Glass: clear, not frosted. A barely there fill with a sheen across the top,
@@ -51,6 +52,9 @@
   --glass-blur: 8px;
   /* Ambient: accent strength of the one top glow. Faint on purpose, the canvas stays flat. */
   --glow: 14%;
+  --glow-pointer: 10%;
+  /* Tile fill for project rows: a thin lift over the canvas, so the glows still read through. */
+  --tile: rgba(255, 255, 255, 0.045);
   --sans: "Host Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --max: 70rem;
@@ -87,6 +91,8 @@
   --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 14px 36px -10px rgba(0, 0, 0, 0.2);
   --glass-shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.07), 0 18px 48px -10px rgba(0, 0, 0, 0.26);
   --glow: 12%;
+  --glow-pointer: 8%;
+  --tile: rgba(0, 0, 0, 0.03);
 }
 
 /* Reset */
@@ -112,6 +118,15 @@ body::before {
   top: 0; left: 0; right: 0; height: 60vh;
   background: radial-gradient(ellipse 60% 70% at 50% -20%, color-mix(in srgb, var(--accent) var(--glow), transparent), transparent 100%);
 }
+/* Pointer light. A second, wider glow that trails the pointer across the page: glass.ts eases
+   --px/--py on the root and sets html.pointer once a pointer has moved, clearing it when the pointer
+   leaves the window. Never shown on touch. */
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(28rem circle at var(--px, 50%) var(--py, 50%), color-mix(in srgb, var(--accent) var(--glow-pointer), transparent), transparent 70%);
+  opacity: 0; transition: opacity 0.6s var(--ease);
+}
+html.pointer body::after { opacity: 1; }
 img, svg { max-width: 100%; display: block; }
 h1, h2, h3, h4 { margin: 0; font-weight: 500; line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance; }
 p { margin: 0; }
@@ -123,9 +138,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 main { padding-top: var(--header-offset); }
 
 /* Type. Fluid sizes that still fit a 320px phone at the small end. Medium weight, not bold: the
-   display says its line in one colour, the second line steps back to grey instead of the accent. */
+   display says its line in one colour, the second line steps back to grey. The brand variant is the
+   home page only: the name in the accent, the role line a size down so the name carries. */
 .display { font-size: clamp(2.25rem, 0.75rem + 5vw, 4.5rem); font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; }
 .display span { display: block; color: var(--fg-2); }
+.display.brand { color: var(--accent); }
+.display.brand span { margin-top: 0.2em; font-size: 0.6em; letter-spacing: -0.02em; line-height: 1.15; }
 .h2 { font-size: clamp(1.75rem, 1rem + 2.5vw, 2.5rem); letter-spacing: -0.02em; }
 .h3 { font-size: 1.25rem; letter-spacing: -0.01em; }
 .lede { font-size: clamp(1.0625rem, 1.4vw, 1.25rem); line-height: 1.5; color: var(--fg-2); max-width: var(--measure); text-wrap: pretty; }
@@ -153,14 +171,20 @@ a { color: inherit; text-decoration: none; }
   min-height: 2.75rem; padding: 0.7em 1.3em; border-radius: var(--radius-pill);
   background: var(--btn-bg); color: var(--btn-fg);
   font-size: 0.9375rem; font-weight: 500; line-height: 1.2;
-  transition: opacity 0.25s, transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+  /* A soft accent glow under the pill; hover lifts it, deepens the glow and shifts the fill one step
+     towards the foreground (lighter in dark, deeper in light). */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 10px 24px -12px color-mix(in srgb, var(--accent) 60%, transparent);
+  transition: background-color 0.25s, transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
 }
-.btn:hover { opacity: 0.85; }
-.btn:active { transform: scale(0.97); }
-/* Ghost is a glass capsule (recipe below): its own blur, never nested inside another blurred surface. */
+.btn:hover {
+  background-color: color-mix(in srgb, var(--btn-bg) 86%, var(--fg));
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 14px 32px -12px color-mix(in srgb, var(--accent) 80%, transparent);
+}
+.btn:active { transform: scale(0.97); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 6px 16px -10px color-mix(in srgb, var(--accent) 60%, transparent); }
+/* Ghost is a glass capsule (recipe below): its own blur, never nested inside another blurred surface.
+   The recipe comes later at the same specificity, so its fill and shadow win over .btn on every state. */
 .btn.ghost { position: relative; color: var(--fg); }
-.btn.ghost:hover { opacity: 1; transform: translateY(-1px); }
-.btn.ghost:active { transform: scale(0.97); }
 
 /* Layout */
 .wrap { max-width: var(--max); margin-inline: auto; padding-inline: max(var(--gutter), env(safe-area-inset-left)) max(var(--gutter), env(safe-area-inset-right)); }
@@ -315,14 +339,39 @@ a { color: inherit; text-decoration: none; }
 .figure { font-size: clamp(3.25rem, 1rem + 11vw, 10rem); font-weight: 600; letter-spacing: -0.05em; line-height: 0.95; font-variant-numeric: tabular-nums; color: var(--accent); overflow-wrap: anywhere; }
 .figure-note { margin-top: 1.25rem; max-width: 32rem; font-size: 1.125rem; color: var(--fg-2); text-wrap: pretty; }
 
-/* Two column record: project rows and CV entries share the same grid. */
-.rows, .entries { border-top: 1px solid var(--line); }
+/* Two column record: project rows and CV entries share the same grid. Entries are a hairline list;
+   project rows are tiles. */
+.entries { border-top: 1px solid var(--line); }
 .row, .entry {
   --brand: var(--accent);
   display: grid; gap: 1rem 3rem; padding: 2rem 0;
-  border-bottom: 1px solid var(--line);
 }
-.row { padding-inline: var(--gutter); margin-inline: calc(-1 * var(--gutter)); transition: background-color 0.35s var(--ease); }
+.entry { border-bottom: 1px solid var(--line); }
+/* Tile: a thin fill on a hairline, and a light in the project's own brand colour that follows the
+   pointer (glass.ts writes --mx/--my): ::before is a soft pool inside, ::after the same light on the
+   rim, masked to the 1px ring over the hairline. Both fade in on hover, pointer devices only. The rim
+   colour is mixed towards the foreground so a near-black brand (NCash) still lights up in dark. */
+.rows { display: grid; gap: 1rem; }
+.row {
+  position: relative; isolation: isolate;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  border-radius: var(--radius-lg);
+  background: var(--tile);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.row::before, .row::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit;
+  opacity: 0; transition: opacity 0.45s var(--ease);
+}
+.row::before { background: radial-gradient(24rem circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--brand) 14%, transparent), transparent 65%); }
+.row::after {
+  padding: 1px;
+  background: radial-gradient(18rem circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--brand) 70%, var(--fg)), transparent 65%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
 .row .title { display: flex; align-items: center; gap: 1rem; }
 .row h3 { font-size: 1.5rem; letter-spacing: -0.02em; }
 .row .headline { color: var(--fg-2); margin: 0.75rem 0 0.75rem; }
@@ -335,7 +384,8 @@ a { color: inherit; text-decoration: none; }
 .entry ul { padding-left: 1.1rem; display: grid; gap: 0.5rem; max-width: var(--measure); }
 .entry .note { margin-top: 0.85rem; }
 @media (min-width: 48rem) {
-  .row, .entry { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); padding-block: 2.75rem; }
+  .row, .entry { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); }
+  .entry { padding-block: 2.75rem; }
   .row .headline { margin-top: 0.85rem; }
 }
 
@@ -373,7 +423,7 @@ dl.skills dd { margin: 0; color: var(--fg-2); }
 
 /* Hover effects only where a pointer can hover, so touch screens never get a stuck state. */
 @media (hover: hover) {
-  .row:hover { background-color: color-mix(in srgb, var(--brand) 7%, transparent); }
+  .row:hover::before, .row:hover::after { opacity: 1; }
   .apps a:hover { transform: translateY(-4px) scale(1.06); }
 }
 
@@ -395,11 +445,13 @@ html.js [data-reveal].in { opacity: 1; transform: none; }
 /* Glass fallbacks target the surfaces, not :root: a :root override loses to the dark token blocks on specificity. */
 @media (prefers-reduced-transparency: reduce) {
   .site-header, .btn.ghost, .apps { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .row { background: var(--band); }
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   /* Plain token, not color-mix(): an engine without backdrop-filter is older than color-mix() too. */
   .site-header, .btn.ghost, .apps { background: var(--band); }
-  .site-header::before, .btn.ghost::before, .apps::before, .site-header::after, .btn.ghost::after, .apps::after { display: none; }
+  .site-header::before, .btn.ghost::before, .apps::before, .site-header::after, .btn.ghost::after, .apps::after,
+  .row::before, .row::after, body::after { display: none; }
 }
 
 /* Print, used by the CV page */
@@ -409,7 +461,7 @@ html.js [data-reveal].in { opacity: 1; transform: none; }
   body { color: #000; background: #fff; font-size: 10.5pt; }
   main { padding-top: 0; }
   .hero, .hero.small { padding-block: 0 1rem; }
-  body::before { display: none; }
+  body::before, body::after { display: none; }
   .band, .band.soft, .band.tint { padding-block: 1rem; background: none; }
   .band .h2 { margin-bottom: 0.75rem; }
   .entry { grid-template-columns: 1fr; gap: 0.25rem; padding-block: 0.75rem; }

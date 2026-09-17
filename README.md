@@ -77,8 +77,8 @@ Twitter cards, `theme-color` for both schemes, JSON-LD `Person` (plus an optiona
 the sitemap link, font preload, skip link, `Header`, `<main>`, `Footer`. It also mounts Astro's
 `ClientRouter`, so navigation between pages is a view transition instead of a full reload.
 
-**Page grammar.** Every page is `Hero` (eyebrow, two-line title with the second line in the accent,
-lede, actions) → one `Figure` band (a single proof number) → `Section` bands that alternate plain
+**Page grammar.** Every page is `Hero` (eyebrow, two-line title with the second line in grey; the
+home page passes `brand` for the name in the accent with the role line a size down, lede, actions) → one `Figure` band (a single proof number) → `Section` bands that alternate plain
 and soft backgrounds. Records (projects, roles, degree) share one two-column grid from 48rem up and
 stack below that.
 
@@ -135,12 +135,16 @@ a public Google Play listing. Contact email and the WhatsApp number in `profile.
 choice; the number stays out of the CV PDF and out of this file.
 
 **Design.** Monochrome plus one accent, type led, quiet, one idea per band. Near-black canvas by
-default. Headings are medium weight, not bold; the second display line is grey, the accent is kept
-for links, the one proof figure and nothing else. No cards, no stat boxes, no decorative icons, no
+default. Headings are medium weight, not bold; the second display line is grey. The accent carries
+the name on the home page, the primary button (an accent pill with a soft glow), links and the one
+proof figure, nothing else. No cards, no stat boxes, no decorative icons, no
 timeline dots. Content bands stay flat; the header pill, ghost buttons and the launcher tray share
 one glass recipe in `global.css`, modelled on Apple's Liquid Glass: a clear slab, not frosted glass.
 A thin fill with a sheen, a light blur, a lit edge (rim, an inner band of bent light, a shadow on
 the far side), a specular that follows the pointer, a drop shadow. The header pill turns milkier
 and blurs more once text scrolls beneath it. One faint, static accent glow sits at the top of every
-page so the pill has colour to bend. Nothing else is translucent.
+page so the pill has colour to bend, and a second, wider one trails the pointer (`glass.ts`, pointer
+devices only). Project rows are tiles: a thin fill on a hairline, lit under the pointer in the
+project's own brand colour (a soft pool inside, the same light on the rim). Nothing else is
+translucent.
 Sizes are fluid and checked down to a 320px phone.
