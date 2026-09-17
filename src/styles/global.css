@@ -1,4 +1,4 @@
-/* Design system. Monochrome plus one accent, type led. Glass (blur, gradient rim, gloss, pointer specular, drop shadow) on chrome only: header pill, ghost buttons, launcher tray; the toggle and nav capsules sit inside the pill. Two accent glows fixed behind every page give the glass colour to bend. Two schemes: light by default, dark only when the header toggle stores it in localStorage. */
+/* Design system. Monochrome plus one accent, type led, quiet. Glass (light blur, gradient rim, pointer specular, drop shadow) on chrome only: header pill, ghost buttons, launcher tray; the toggle and nav capsules sit inside the pill. One faint accent glow fixed at the top of every page gives the pill colour to bend. Two schemes: dark by default, light only when the header toggle stores it in localStorage. */
 
 @font-face {
   font-family: "Host Grotesk";
@@ -17,42 +17,40 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-/* Tokens. Light is the base; the dark block is applied twice, once for the system setting and once for the stored choice. */
+/* Tokens. Dark is the base; the light block applies only for the stored choice. */
 :root {
-  color-scheme: light;
-  --bg: #ffffff;
-  --band: #f5f5f7;
-  --fg: #1d1d1f;
-  --fg-2: #6e6e73;
-  --line: rgba(0, 0, 0, 0.08);
-  --line-2: rgba(0, 0, 0, 0.22);
-  --accent: #0a7c71;
-  --accent-ink: #ffffff;
-  --sun: none;
-  --moon: block;
-  --btn-bg: var(--accent);
-  --btn-fg: var(--accent-ink);
+  color-scheme: dark;
+  --bg: #0a0a0a;
+  --band: #141416;
+  --fg: #f5f5f7;
+  --fg-2: #86868b;
+  --line: rgba(255, 255, 255, 0.1);
+  --line-2: rgba(255, 255, 255, 0.28);
+  --accent: #4dd4c4;
+  --sun: block;
+  --moon: none;
+  /* Primary button is the foreground on the canvas, not the accent: one high contrast pill. */
+  --btn-bg: var(--fg);
+  --btn-fg: var(--bg);
   --focus: var(--accent);
   /* Glass, Apple's Liquid Glass: clear, not frosted. A barely there fill with a sheen across the top,
-     a light blur so what is behind stays legible, a thick lit edge (rim, an inner band of bent light,
-     a shadow on the far side for slab depth), a faint chromatic fringe, a pointer specular, a real drop
-     shadow. The -lift pair is the scrolled pill. Chrome only. */
-  --glass-fill: rgba(255, 255, 255, 0.2);
-  --glass-fill-lift: rgba(255, 255, 255, 0.62);
-  --glass-sheen: rgba(255, 255, 255, 0.5);
-  --glass-rim: rgba(255, 255, 255, 0.98);
-  --glass-rim-2: rgba(255, 255, 255, 0.4);
-  --glass-edge: rgba(0, 0, 0, 0.11);
-  --glass-inner: rgba(255, 255, 255, 0.6);
-  --glass-depth: rgba(0, 0, 0, 0.16);
-  --glass-spec: rgba(255, 255, 255, 0.85);
-  --glass-chroma: 24%;
-  --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 14px 36px -10px rgba(0, 0, 0, 0.24);
-  --glass-shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.07), 0 18px 48px -10px rgba(0, 0, 0, 0.3);
+     a light blur so what is behind stays legible, a lit edge (rim, an inner band of bent light, a
+     shadow on the far side for slab depth), a pointer specular, a real drop shadow. The -lift pair is
+     the scrolled pill. Chrome only. */
+  --glass-fill: rgba(28, 28, 32, 0.35);
+  --glass-fill-lift: rgba(20, 20, 22, 0.72);
+  --glass-sheen: rgba(255, 255, 255, 0.08);
+  --glass-rim: rgba(255, 255, 255, 0.5);
+  --glass-rim-2: rgba(255, 255, 255, 0.1);
+  --glass-edge: rgba(255, 255, 255, 0.06);
+  --glass-inner: rgba(255, 255, 255, 0.12);
+  --glass-depth: rgba(0, 0, 0, 0.45);
+  --glass-spec: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 16px 44px -10px rgba(0, 0, 0, 0.65);
+  --glass-shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.6), 0 20px 56px -10px rgba(0, 0, 0, 0.8);
   --glass-blur: 8px;
-  /* Ambient: accent strength of the two page glows. Light needs more, the accent is dark on white. */
-  --glow: 36%;
-  --glow-2: 18%;
+  /* Ambient: accent strength of the one top glow. Faint on purpose, the canvas stays flat. */
+  --glow: 14%;
   --sans: "Host Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --max: 70rem;
@@ -66,33 +64,29 @@
   --header-offset: calc(var(--header) + 2 * var(--header-inset));
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --bg: #000000;
-  --band: #1d1d1f;
-  --fg: #f5f5f7;
-  --fg-2: #86868b;
-  --line: rgba(255, 255, 255, 0.12);
-  --line-2: rgba(255, 255, 255, 0.3);
-  --accent: #4dd4c4;
-  --accent-ink: #00201c;
-  --sun: block;
-  --moon: none;
-  --glass-fill: rgba(28, 28, 32, 0.35);
-  --glass-fill-lift: rgba(22, 22, 26, 0.7);
-  --glass-sheen: rgba(255, 255, 255, 0.1);
-  --glass-rim: rgba(255, 255, 255, 0.55);
-  --glass-rim-2: rgba(255, 255, 255, 0.1);
-  --glass-edge: rgba(255, 255, 255, 0.05);
-  --glass-inner: rgba(255, 255, 255, 0.14);
-  --glass-depth: rgba(0, 0, 0, 0.45);
-  --glass-spec: rgba(255, 255, 255, 0.26);
-  --glass-chroma: 16%;
-  --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 16px 44px -10px rgba(0, 0, 0, 0.65);
-  --glass-shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.6), 0 20px 56px -10px rgba(0, 0, 0, 0.8);
-  --glass-blur: 8px;
-  --glow: 30%;
-  --glow-2: 14%;
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #ffffff;
+  --band: #f5f5f7;
+  --fg: #1d1d1f;
+  --fg-2: #6e6e73;
+  --line: rgba(0, 0, 0, 0.08);
+  --line-2: rgba(0, 0, 0, 0.22);
+  --accent: #0a7c71;
+  --sun: none;
+  --moon: block;
+  --glass-fill: rgba(255, 255, 255, 0.4);
+  --glass-fill-lift: rgba(255, 255, 255, 0.72);
+  --glass-sheen: rgba(255, 255, 255, 0.5);
+  --glass-rim: rgba(255, 255, 255, 0.98);
+  --glass-rim-2: rgba(255, 255, 255, 0.4);
+  --glass-edge: rgba(0, 0, 0, 0.1);
+  --glass-inner: rgba(255, 255, 255, 0.6);
+  --glass-depth: rgba(0, 0, 0, 0.12);
+  --glass-spec: rgba(255, 255, 255, 0.85);
+  --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 14px 36px -10px rgba(0, 0, 0, 0.2);
+  --glass-shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.07), 0 18px 48px -10px rgba(0, 0, 0, 0.26);
+  --glow: 12%;
 }
 
 /* Reset */
@@ -109,31 +103,17 @@ body {
   text-rendering: optimizeLegibility;
   transition: background-color 0.3s, color 0.3s;
 }
-/* Ambient. Two soft accent glows fixed to the viewport, behind every page, so the glass always has
-   colour to refract, at the top of the home page and three screens down the CV alike. The first sits
-   top left under the header pill, the second bottom right. Negative z-index in the root stacking
-   context paints them above the canvas and below all content. Transform only, so the drift stays on
-   the compositor; fixed, so they never widen the page. */
-body::before, body::after {
-  content: ""; position: fixed; z-index: -1; pointer-events: none;
-  border-radius: 50%; will-change: transform;
-}
+/* Ambient. One faint accent glow fixed to the top of the viewport, behind every page, centred under
+   the header pill so the glass always has a little colour to bend. Static: no drift, no second blob.
+   Negative z-index in the root stacking context paints it above the canvas and below all content;
+   fixed, so it never widens the page. */
 body::before {
-  top: -22vh; left: -14vw;
-  width: min(92vw, 68rem); height: 84vh;
-  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) var(--glow), transparent), transparent);
-  animation: glow-a 26s ease-in-out infinite alternate;
+  content: ""; position: fixed; z-index: -1; pointer-events: none;
+  top: 0; left: 0; right: 0; height: 60vh;
+  background: radial-gradient(ellipse 60% 70% at 50% -20%, color-mix(in srgb, var(--accent) var(--glow), transparent), transparent 100%);
 }
-body::after {
-  bottom: -24vh; right: -16vw;
-  width: min(64vw, 48rem); height: 68vh;
-  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) var(--glow-2), transparent), transparent);
-  animation: glow-b 32s ease-in-out infinite alternate;
-}
-@keyframes glow-a { to { transform: translate3d(6%, 5%, 0) scale(1.08); } }
-@keyframes glow-b { to { transform: translate3d(-5%, -6%, 0) scale(0.94); } }
 img, svg { max-width: 100%; display: block; }
-h1, h2, h3, h4 { margin: 0; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance; }
+h1, h2, h3, h4 { margin: 0; font-weight: 500; line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance; }
 p { margin: 0; }
 p + p { margin-top: 1em; }
 ul, ol { margin: 0; padding: 0; }
@@ -142,13 +122,14 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 [id] { scroll-margin-top: calc(var(--header-offset) + 1rem); }
 main { padding-top: var(--header-offset); }
 
-/* Type. Fluid sizes that still fit a 320px phone at the small end. */
-.display { font-size: clamp(2.25rem, 0.5rem + 6vw, 5.5rem); letter-spacing: -0.035em; line-height: 1.02; }
-.display span { display: block; color: var(--accent); }
-.h2 { font-size: clamp(1.875rem, 1rem + 3vw, 3rem); letter-spacing: -0.025em; }
+/* Type. Fluid sizes that still fit a 320px phone at the small end. Medium weight, not bold: the
+   display says its line in one colour, the second line steps back to grey instead of the accent. */
+.display { font-size: clamp(2.25rem, 0.75rem + 5vw, 4.5rem); font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; }
+.display span { display: block; color: var(--fg-2); }
+.h2 { font-size: clamp(1.75rem, 1rem + 2.5vw, 2.5rem); letter-spacing: -0.02em; }
 .h3 { font-size: 1.25rem; letter-spacing: -0.01em; }
-.lede { font-size: clamp(1.125rem, 1.6vw, 1.375rem); line-height: 1.4; color: var(--fg-2); max-width: var(--measure); text-wrap: pretty; }
-.eyebrow { font-size: 0.9375rem; font-weight: 500; color: var(--fg-2); }
+.lede { font-size: clamp(1.0625rem, 1.4vw, 1.25rem); line-height: 1.5; color: var(--fg-2); max-width: var(--measure); text-wrap: pretty; }
+.eyebrow { font-family: var(--mono); font-size: 0.8125rem; font-weight: 400; color: var(--fg-2); }
 .meta { font-family: var(--mono); font-size: 0.8125rem; color: var(--fg-2); font-variant-numeric: tabular-nums; }
 .muted { color: var(--fg-2); }
 .prose { max-width: var(--measure); text-wrap: pretty; }
@@ -171,11 +152,10 @@ a { color: inherit; text-decoration: none; }
   display: inline-flex; align-items: center; gap: 0.4em;
   min-height: 2.75rem; padding: 0.7em 1.3em; border-radius: var(--radius-pill);
   background: var(--btn-bg); color: var(--btn-fg);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   font-size: 0.9375rem; font-weight: 500; line-height: 1.2;
   transition: opacity 0.25s, transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
 }
-.btn:hover { opacity: 0.82; }
+.btn:hover { opacity: 0.85; }
 .btn:active { transform: scale(0.97); }
 /* Ghost is a glass capsule (recipe below): its own blur, never nested inside another blurred surface. */
 .btn.ghost { position: relative; color: var(--fg); }
@@ -187,7 +167,7 @@ a { color: inherit; text-decoration: none; }
 .band { padding-block: clamp(3.5rem, 9vw, 8rem); }
 /* Translucent, so the ambient glows show through a band instead of stopping at its edge. */
 .band.soft { background: color-mix(in srgb, var(--band) 72%, transparent); }
-.band.tint { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.band.tint { background: color-mix(in srgb, var(--accent) 6%, transparent); }
 .band.rule { border-top: 1px solid var(--line); }
 .band.tight { padding-top: 0; }
 .band .h2 { margin-bottom: clamp(1.75rem, 4vw, 3rem); }
@@ -201,9 +181,9 @@ a { color: inherit; text-decoration: none; }
    inset shadows that draw a thick edge: a second highlight line inside the rim top and bottom, a wide
    band of bent light along every edge, and a shadow on the far side that gives the slab depth. ::before
    is the 1px rim masked to the border ring: bright at the lit and the opposite corner (light enters at
-   one edge and leaves at the other), clear along the sides, where a faint hue sweep underneath reads as
-   dispersion. ::after is a specular that follows the pointer (glass.ts writes --mx/--my) and fades in
-   on hover. Both pseudos sit at z-index -1 inside the element's own stacking context, under content. */
+   one edge and leaves at the other), dim along the sides. ::after is a specular that follows the
+   pointer (glass.ts writes --mx/--my) and fades in on hover. Both pseudos sit at z-index -1 inside
+   the element's own stacking context, under content. */
 .site-header, .btn.ghost, .apps {
   isolation: isolate;
   background-color: var(--glass-fill);
@@ -224,16 +204,7 @@ a { color: inherit; text-decoration: none; }
 }
 .site-header::before, .btn.ghost::before, .apps::before {
   padding: 1px;
-  /* Plain rim first: an engine with backdrop-filter but no color-mix() (Safari 15 to 16.1) drops the
-     two layer declaration below and keeps this one. */
   background: linear-gradient(135deg, var(--glass-rim) 0%, var(--glass-rim-2) 30%, var(--glass-rim-2) 70%, var(--glass-rim) 100%);
-  background:
-    linear-gradient(135deg, var(--glass-rim) 0%, var(--glass-rim-2) 26%, transparent 42%, transparent 58%, var(--glass-rim-2) 74%, var(--glass-rim) 100%),
-    conic-gradient(from 160deg,
-      color-mix(in srgb, #5ac8fa var(--glass-chroma), transparent),
-      color-mix(in srgb, #ff2d92 var(--glass-chroma), transparent) 35%,
-      color-mix(in srgb, #ffd60a var(--glass-chroma), transparent) 65%,
-      color-mix(in srgb, #5ac8fa var(--glass-chroma), transparent));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -418,8 +389,6 @@ html.js [data-reveal].in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   html.js [data-reveal] { opacity: 1; transform: none; transition: none; }
-  /* Off, not shortened: an infinite alternate animation at 0.01ms would flicker. */
-  body::before, body::after { animation: none; }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }
 
@@ -440,7 +409,7 @@ html.js [data-reveal].in { opacity: 1; transform: none; }
   body { color: #000; background: #fff; font-size: 10.5pt; }
   main { padding-top: 0; }
   .hero, .hero.small { padding-block: 0 1rem; }
-  body::before, body::after { display: none; }
+  body::before { display: none; }
   .band, .band.soft, .band.tint { padding-block: 1rem; background: none; }
   .band .h2 { margin-bottom: 0.75rem; }
   .entry { grid-template-columns: 1fr; gap: 0.25rem; padding-block: 0.75rem; }

@@ -82,11 +82,10 @@ lede, actions) → one `Figure` band (a single proof number) → `Section` bands
 and soft backgrounds. Records (projects, roles, degree) share one two-column grid from 48rem up and
 stack below that.
 
-**Theme.** Light and dark tokens in `global.css`. Default follows the system setting. The header
-toggle stores `theme` in `localStorage`; an inline script in `Base.astro` applies it before first
-paint and again after every view transition, because the swap resets `<html>` attributes. Choosing
-the scheme that matches the system removes the stored value, so "follow system" needs no third
-state.
+**Theme.** Dark and light tokens in `global.css`. Dark is the default on every first visit,
+whatever the OS says. The header toggle stores `theme=light` in `localStorage`; an inline script
+in `Base.astro` applies it before first paint and again after every view transition, because the
+swap resets `<html>` attributes. Choosing dark removes the stored value, so dark is never stored.
 
 **Motion.** `reveal.ts` runs one `IntersectionObserver` that adds `.in` to `[data-reveal]` elements
 and toggles a header hairline on scroll. Reveal and view transitions switch off under
@@ -135,12 +134,13 @@ qlmanage -t -s 1200 -o /tmp design/og.svg && sips -c 630 1200 /tmp/og.svg.png --
 a public Google Play listing. Contact email and the WhatsApp number in `profile.ts` are public by
 choice; the number stays out of the CV PDF and out of this file.
 
-**Design.** Monochrome plus one accent, type led, one idea per band. No cards, no stat boxes, no
-decorative icons, no timeline dots. Content bands stay flat; the header pill, ghost buttons and
-the launcher tray share one glass recipe in `global.css`, modelled on Apple's Liquid Glass: a clear
-slab, not frosted glass. A thin fill with a sheen, a light blur, a thick lit edge (rim, an inner band
-of bent light, a shadow on the far side), a faint chromatic fringe, a specular that follows the
-pointer, a drop shadow. The header pill turns milkier and blurs more once text scrolls beneath it.
-Each hero has two slow drifting accent glows behind it so the glass has colour to refract. Nothing
-else is translucent.
+**Design.** Monochrome plus one accent, type led, quiet, one idea per band. Near-black canvas by
+default. Headings are medium weight, not bold; the second display line is grey, the accent is kept
+for links, the one proof figure and nothing else. No cards, no stat boxes, no decorative icons, no
+timeline dots. Content bands stay flat; the header pill, ghost buttons and the launcher tray share
+one glass recipe in `global.css`, modelled on Apple's Liquid Glass: a clear slab, not frosted glass.
+A thin fill with a sheen, a light blur, a lit edge (rim, an inner band of bent light, a shadow on
+the far side), a specular that follows the pointer, a drop shadow. The header pill turns milkier
+and blurs more once text scrolls beneath it. One faint, static accent glow sits at the top of every
+page so the pill has colour to bend. Nothing else is translucent.
 Sizes are fluid and checked down to a 320px phone.

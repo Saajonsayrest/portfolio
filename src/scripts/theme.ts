@@ -1,13 +1,13 @@
-// Theme toggle. Light is the default. The inline script in Base.astro applies a stored dark
+// Theme toggle. Dark is the default. The inline script in Base.astro applies a stored light
 // choice before first paint and again after every view transition; this module only handles the
-// button and keeps labels in sync. Choosing light clears the key, so light never needs storing.
+// button and keeps labels in sync. Choosing dark clears the key, so dark never needs storing.
 
 const KEY = 'theme';
-const COLOURS = { light: '#ffffff', dark: '#000000' } as const;
+const COLOURS = { light: '#ffffff', dark: '#0a0a0a' } as const;
 type Theme = keyof typeof COLOURS;
 
 const root = document.documentElement;
-const current = (): Theme => (root.dataset.theme === 'dark' ? 'dark' : 'light');
+const current = (): Theme => (root.dataset.theme === 'light' ? 'light' : 'dark');
 
 function sync() {
   const theme = current();
@@ -21,10 +21,10 @@ function sync() {
 
 function set(theme: Theme) {
   try {
-    if (theme === 'dark') localStorage.setItem(KEY, theme);
+    if (theme === 'light') localStorage.setItem(KEY, theme);
     else localStorage.removeItem(KEY);
   } catch {}
-  if (theme === 'dark') root.dataset.theme = theme;
+  if (theme === 'light') root.dataset.theme = theme;
   else delete root.dataset.theme;
   sync();
 }
