@@ -1,7 +1,8 @@
 // Single source of truth for every fact on the site.
 // Every figure here traces to the CV source. Change a fact there first, then here.
 // Never the other way round.
-// Public-safe only. No phone, no referees, no identity numbers, no unverified install counts.
+// Public-safe only. No referees, no identity numbers, no unverified install counts. The WhatsApp
+// number is public by choice; it stays out of the CV PDF and the README.
 
 export const site = {
   name: 'Sajon Shrestha',
@@ -11,6 +12,7 @@ export const site = {
     'Sajon Shrestha is a Flutter and mobile engineer in Kathmandu, Nepal. Seven products public on Google Play, one past 100,000 installs. Media playback, subscriptions, release engineering.',
   url: 'https://sajon.com.np',
   email: 'sajonshrestha5@gmail.com',
+  whatsapp: { number: '+977 9867232534', url: 'https://wa.me/9779867232534' },
   location: 'Kathmandu, Nepal',
   links: {
     linkedin: 'https://linkedin.com/in/sajonshrestha',

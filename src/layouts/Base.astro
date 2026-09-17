@@ -23,6 +23,7 @@ const person = {
   name: site.name,
   url: site.url,
   email: `mailto:${site.email}`,
+  telephone: site.whatsapp.number.replace(/\s/g, ''),
   jobTitle: 'Software Engineer, Flutter',
   worksFor: { '@type': 'Organization', name: 'Webpoint Solutions', url: 'https://webpoint.io' },
   alumniOf: { '@type': 'CollegeOrUniversity', name: 'Tribhuvan University', url: 'https://tu.edu.np' },
@@ -90,6 +91,7 @@ const person = {
     <script>
       import '../scripts/reveal.ts';
       import '../scripts/theme.ts';
+      import '../scripts/glass.ts';
     </script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-/* Design system. Monochrome plus one accent, type led. Glass (blur, specular rim, soft shadow) on chrome only: header pill, buttons, toggle, launcher tray. Two schemes: the system setting by default, a header toggle stored in localStorage. */
+/* Design system. Monochrome plus one accent, type led. Glass (blur, gradient rim, gloss, pointer specular, drop shadow) on chrome only: header pill, ghost buttons, launcher tray; the toggle and nav capsules sit inside the pill. Two schemes: the system setting by default, a header toggle stored in localStorage. */
 
 @font-face {
   font-family: "Host Grotesk";
@@ -33,10 +33,18 @@
   --btn-bg: var(--accent);
   --btn-fg: var(--accent-ink);
   --focus: var(--accent);
-  /* Glass: translucent fill, a specular rim along the top edge, a soft drop shadow. Chrome only. */
-  --glass-bg: rgba(255, 255, 255, 0.66);
-  --glass-rim: rgba(255, 255, 255, 0.6);
-  --glass-shadow: 0 1px 1px rgba(0, 0, 0, 0.04), 0 10px 30px rgba(0, 0, 0, 0.12);
+  /* Glass: a fill that fades top to bottom, a 1px rim lit from the top left, a gloss across the top,
+     a specular that follows the pointer, a real drop shadow. Chrome only. */
+  --glass-fill: rgba(255, 255, 255, 0.58);
+  --glass-fill-2: rgba(255, 255, 255, 0.36);
+  --glass-rim: rgba(255, 255, 255, 0.95);
+  --glass-rim-2: rgba(255, 255, 255, 0.3);
+  --glass-edge: rgba(0, 0, 0, 0.07);
+  --glass-gloss: rgba(255, 255, 255, 0.7);
+  --glass-spec: rgba(255, 255, 255, 0.75);
+  --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 12px 40px -8px rgba(0, 0, 0, 0.2);
+  --glass-blur: 24px;
+  --glow: 28%;
   --sans: "Host Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --max: 70rem;
@@ -63,9 +71,15 @@
     --accent-ink: #00201c;
     --sun: block;
     --moon: none;
-    --glass-bg: rgba(28, 28, 30, 0.6);
-    --glass-rim: rgba(255, 255, 255, 0.12);
-    --glass-shadow: 0 1px 1px rgba(0, 0, 0, 0.5), 0 12px 34px rgba(0, 0, 0, 0.55);
+    --glass-fill: rgba(34, 34, 38, 0.55);
+    --glass-fill-2: rgba(18, 18, 22, 0.45);
+    --glass-rim: rgba(255, 255, 255, 0.38);
+    --glass-rim-2: rgba(255, 255, 255, 0.07);
+    --glass-edge: rgba(255, 255, 255, 0.06);
+    --glass-gloss: rgba(255, 255, 255, 0.1);
+    --glass-spec: rgba(255, 255, 255, 0.22);
+    --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 16px 48px -8px rgba(0, 0, 0, 0.7);
+    --glow: 30%;
   }
 }
 :root[data-theme="dark"] {
@@ -80,9 +94,15 @@
   --accent-ink: #00201c;
   --sun: block;
   --moon: none;
-  --glass-bg: rgba(28, 28, 30, 0.6);
-  --glass-rim: rgba(255, 255, 255, 0.12);
-  --glass-shadow: 0 1px 1px rgba(0, 0, 0, 0.5), 0 12px 34px rgba(0, 0, 0, 0.55);
+  --glass-fill: rgba(34, 34, 38, 0.55);
+  --glass-fill-2: rgba(18, 18, 22, 0.45);
+  --glass-rim: rgba(255, 255, 255, 0.38);
+  --glass-rim-2: rgba(255, 255, 255, 0.07);
+  --glass-edge: rgba(255, 255, 255, 0.06);
+  --glass-gloss: rgba(255, 255, 255, 0.1);
+  --glass-spec: rgba(255, 255, 255, 0.22);
+  --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 16px 48px -8px rgba(0, 0, 0, 0.7);
+  --glow: 30%;
 }
 
 /* Reset */
@@ -140,18 +160,14 @@ a { color: inherit; text-decoration: none; }
   background: var(--btn-bg); color: var(--btn-fg);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   font-size: 0.9375rem; font-weight: 500; line-height: 1.2;
-  transition: opacity 0.2s, transform 0.2s var(--ease), box-shadow 0.2s;
+  transition: opacity 0.25s, transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
 }
 .btn:hover { opacity: 0.82; }
-.btn:active { transform: scale(0.98); }
-/* Ghost is a true glass capsule: its own blur, never nested inside another blurred surface. */
-.btn.ghost {
-  background: var(--glass-bg); color: var(--fg);
-  -webkit-backdrop-filter: saturate(160%) blur(14px);
-  backdrop-filter: saturate(160%) blur(14px);
-  box-shadow: inset 0 1px 0 var(--glass-rim), inset 0 0 0 1px var(--line);
-}
-.btn.ghost:hover { opacity: 1; box-shadow: inset 0 1px 0 var(--glass-rim), inset 0 0 0 1px var(--fg); }
+.btn:active { transform: scale(0.97); }
+/* Ghost is a glass capsule (recipe below): its own blur, never nested inside another blurred surface. */
+.btn.ghost { position: relative; color: var(--fg); }
+.btn.ghost:hover { opacity: 1; transform: translateY(-1px); }
+.btn.ghost:active { transform: scale(0.97); }
 
 /* Layout */
 .wrap { max-width: var(--max); margin-inline: auto; padding-inline: max(var(--gutter), env(safe-area-inset-left)) max(var(--gutter), env(safe-area-inset-right)); }
@@ -165,6 +181,39 @@ a { color: inherit; text-decoration: none; }
 .skip { position: absolute; left: -999px; top: 0; padding: 0.5rem 1rem; background: var(--fg); color: var(--bg); z-index: 40; }
 .skip:focus { left: 0.5rem; top: 0.5rem; }
 
+/* Glass recipe, shared by the header pill, ghost buttons and the launcher tray. Four layers:
+   the element carries the fill, the blur, a gloss along the top (inset shadow) and the drop shadow;
+   ::before is a 1px rim drawn as a gradient and masked to the border ring, lit from the top left;
+   ::after is a specular that follows the pointer (glass.ts writes --mx/--my) and fades in on hover.
+   Both pseudos sit at z-index -1 inside the element's own stacking context, under its content. */
+.site-header, .btn.ghost, .apps {
+  isolation: isolate;
+  background: linear-gradient(180deg, var(--glass-fill), var(--glass-fill-2));
+  -webkit-backdrop-filter: saturate(180%) blur(var(--glass-blur));
+  backdrop-filter: saturate(180%) blur(var(--glass-blur));
+  box-shadow: 0 0 0 1px var(--glass-edge), inset 0 12px 24px -12px var(--glass-gloss), var(--glass-shadow);
+}
+.site-header::before, .btn.ghost::before, .apps::before,
+.site-header::after, .btn.ghost::after, .apps::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit;
+}
+.site-header::before, .btn.ghost::before, .apps::before {
+  padding: 1px;
+  background: linear-gradient(135deg, var(--glass-rim) 0%, var(--glass-rim-2) 38%, var(--glass-rim-2) 62%, var(--glass-rim) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+.site-header::after, .btn.ghost::after, .apps::after {
+  background: radial-gradient(9rem circle at var(--mx, 50%) var(--my, 0%), var(--glass-spec), transparent 62%);
+  opacity: 0;
+  transition: opacity 0.45s var(--ease);
+}
+@media (hover: hover) {
+  .site-header:hover::after, .btn.ghost:hover::after, .apps:hover::after { opacity: 1; }
+}
+
 /* Header: a floating glass pill. Fixed, hugs its content, centred by auto margins (a transform on a
    blurred fixed element flickers in Safari). No overflow clip, so focus rings stay whole. */
 .site-header {
@@ -173,45 +222,56 @@ a { color: inherit; text-decoration: none; }
   width: fit-content; max-width: calc(100% - 2 * var(--header-inset)); margin-inline: auto;
   z-index: 30;
   border-radius: var(--radius-pill);
-  background: var(--glass-bg);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  backdrop-filter: saturate(180%) blur(20px);
-  box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-rim), inset 0 0 0 1px var(--line);
-  transition: background-color 0.3s, box-shadow 0.3s;
+  transition: box-shadow 0.4s var(--ease);
 }
+.site-header.scrolled { box-shadow: 0 0 0 1px var(--glass-edge), inset 0 12px 24px -12px var(--glass-gloss), 0 2px 4px rgba(0, 0, 0, 0.06), 0 18px 48px -10px rgba(0, 0, 0, 0.28); }
 .site-header .wrap {
-  display: flex; align-items: center; gap: 1rem; height: var(--header);
-  max-width: none; padding-inline: clamp(1rem, 3vw, 1.5rem);
-  transition: height 0.3s var(--ease);
+  display: flex; align-items: center; gap: 0.75rem; height: var(--header);
+  max-width: none; padding-inline: clamp(0.9rem, 2.5vw, 1.25rem) clamp(0.5rem, 1.5vw, 0.625rem);
+  transition: height 0.4s var(--ease);
 }
 .site-header.scrolled .wrap { height: calc(var(--header) - 0.5rem); }
 .brand { font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; }
-.site-tools { display: flex; align-items: center; gap: clamp(0.75rem, 2vw, 1.25rem); min-width: 0; }
-.site-nav { display: flex; align-items: center; gap: clamp(0.9rem, 3vw, 2rem); font-size: 0.9375rem; white-space: nowrap; }
-.site-nav a { color: var(--fg-2); transition: color 0.2s; }
-.site-nav a:hover, .site-nav a[aria-current="page"] { color: var(--fg); }
+.site-tools { display: flex; align-items: center; gap: clamp(0.5rem, 1.5vw, 0.75rem); min-width: 0; }
+/* Nav links are capsules; the current page keeps a filled one, like a segmented control. */
+.site-nav { display: flex; align-items: center; gap: 0.125rem; font-size: 0.9375rem; white-space: nowrap; }
+.site-nav a {
+  padding: 0.4em 0.8em; border-radius: var(--radius-pill); color: var(--fg-2);
+  transition: color 0.25s, background-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+.site-nav a:hover { color: var(--fg); background: color-mix(in srgb, var(--fg) 6%, transparent); }
+.site-nav a[aria-current="page"] {
+  color: var(--fg); background: color-mix(in srgb, var(--fg) 9%, transparent);
+  box-shadow: inset 0 1px 0 var(--glass-rim-2), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
 /* The toggle sits inside the blurred pill, so it gets a rim and ring but no blur of its own. */
 .theme {
   display: inline-flex; align-items: center; justify-content: center; flex: none;
   width: 2.25rem; height: 2.25rem; border-radius: var(--radius-pill);
   color: var(--fg-2);
-  box-shadow: inset 0 0 0 1px var(--line), inset 0 1px 0 var(--glass-rim);
-  transition: color 0.2s, background-color 0.2s;
+  background: color-mix(in srgb, var(--fg) 4%, transparent);
+  box-shadow: inset 0 0 0 1px var(--line), inset 0 1px 0 var(--glass-rim-2);
+  transition: color 0.25s, background-color 0.3s var(--ease), transform 0.3s var(--ease);
 }
-.theme:hover { color: var(--fg); background: color-mix(in srgb, var(--fg) 8%, transparent); }
+.theme:hover { color: var(--fg); background: color-mix(in srgb, var(--fg) 10%, transparent); }
+.theme:active { transform: scale(0.92); }
 .theme svg { width: 1.125rem; height: 1.125rem; }
 .theme .sun { display: var(--sun); }
 .theme .moon { display: var(--moon); }
-@media (max-width: 26rem) {
+/* Phones: the brand drops to the first name so four capsules, the toggle and the pill fit a 375px
+   viewport with room to spare; 320px tightens the paddings again. */
+@media (max-width: 30rem) {
   .brand { font-size: 0.9375rem; }
-  .site-nav { font-size: 0.875rem; gap: 0.75rem; }
+  .brand .last { display: none; }
+  .site-nav { font-size: 0.875rem; }
+  .site-nav a { padding: 0.35em 0.55em; }
 }
 @media (max-width: 22.5rem) {
   .site-header { top: 0.5rem; max-width: calc(100% - 1rem); }
-  .site-header .wrap { gap: 0.75rem; padding-inline: 0.75rem; }
-  .brand .last { display: none; }
-  .site-tools { gap: 0.5rem; }
-  .site-nav { font-size: 0.8125rem; gap: 0.6rem; }
+  .site-header .wrap { gap: 0.5rem; padding-inline: 0.75rem 0.4rem; }
+  .site-tools { gap: 0.35rem; }
+  .site-nav { font-size: 0.8125rem; }
+  .site-nav a { padding: 0.35em 0.45em; }
 }
 .site-footer { border-top: 1px solid var(--line); padding-block: 2.5rem; font-size: 0.875rem; color: var(--fg-2); }
 .site-footer .wrap { display: flex; justify-content: space-between; gap: 1rem 2rem; flex-wrap: wrap; }
@@ -219,20 +279,30 @@ a { color: inherit; text-decoration: none; }
 .site-footer a:hover { color: var(--fg); }
 
 /* Hero. Same composition on every page: eyebrow, two line display, lede, actions. The home page adds the app strip. */
-.hero { position: relative; z-index: 0; padding-block: clamp(5rem, 14vw, 10rem) clamp(4rem, 10vw, 7rem); }
+.hero { position: relative; z-index: 0; overflow-x: clip; padding-block: clamp(5rem, 14vw, 10rem) clamp(4rem, 10vw, 7rem); }
 .hero.small { padding-block: clamp(4rem, 10vw, 7rem) clamp(3.5rem, 8vw, 6rem); }
-/* One soft accent glow behind the hero, reaching up to the viewport top so the pill has something to refract.
-   z-index 0 on .hero keeps it behind this band only, never under the next one. */
-.hero::before {
+/* Two soft accent glows drift slowly behind the hero, so the glass has colour to refract. The first
+   reaches up to the viewport top, under the pill. Both stay inside the hero vertically (percent
+   heights), z-index 0 on .hero keeps them behind this band only, and overflow-x clip stops the
+   horizontal overhang from widening the page. Transform only, so the drift stays on the compositor. */
+.hero::before, .hero::after {
   content: ""; position: absolute; z-index: -1; pointer-events: none;
-  inset: calc(-1 * var(--header-offset)) 0 0;
-  background: radial-gradient(
-    70% 60% at 50% 0%,
-    color-mix(in srgb, var(--accent) 16%, transparent) 0%,
-    color-mix(in srgb, var(--accent) 6%, transparent) 45%,
-    transparent 75%
-  );
+  border-radius: 50%; will-change: transform;
 }
+.hero::before {
+  top: calc(-1 * var(--header-offset)); left: -10%;
+  width: min(80%, 60rem); height: calc(75% + var(--header-offset));
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) var(--glow), transparent), transparent);
+  animation: glow-a 26s ease-in-out infinite alternate;
+}
+.hero::after {
+  top: 15%; right: -12%;
+  width: min(55%, 40rem); height: 60%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) calc(var(--glow) / 2), transparent), transparent);
+  animation: glow-b 32s ease-in-out infinite alternate;
+}
+@keyframes glow-a { to { transform: translate3d(6%, 4%, 0) scale(1.08); } }
+@keyframes glow-b { to { transform: translate3d(-5%, -6%, 0) scale(0.94); } }
 .hero .display { margin-block: 1rem 1.5rem; max-width: 24ch; }
 .hero .lede { margin-bottom: 2rem; }
 .hero .wrap > :last-child { margin-bottom: 0; }
@@ -240,18 +310,15 @@ a { color: inherit; text-decoration: none; }
 
 /* App icons, the real launcher icons from each repo */
 .icon { display: block; flex: none; width: var(--icon, 3.5rem); height: var(--icon, 3.5rem); border-radius: 22.5%; background: var(--band); box-shadow: inset 0 0 0 1px var(--line); object-fit: cover; }
-/* Launcher tray, dock style: the one glass surface that holds content, and it holds only icons. */
+/* Launcher tray, dock style (glass recipe above): the one glass surface that holds content, and it holds only icons. */
 .apps {
+  position: relative;
   display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-top: 2.75rem;
   width: fit-content; max-width: 100%; padding: 0.85rem 1rem;
   border-radius: var(--radius-lg);
-  background: var(--glass-bg);
-  -webkit-backdrop-filter: saturate(160%) blur(16px);
-  backdrop-filter: saturate(160%) blur(16px);
-  box-shadow: inset 0 1px 0 var(--glass-rim), inset 0 0 0 1px var(--line);
 }
-.apps a { display: block; border-radius: 22.5%; transition: transform 0.3s var(--ease); }
-.apps .icon { --icon: 3rem; }
+.apps a { display: block; border-radius: 22.5%; transition: transform 0.4s var(--ease); }
+.apps .icon { --icon: 3rem; box-shadow: inset 0 0 0 1px var(--line), 0 2px 6px rgba(0, 0, 0, 0.08); }
 .apps-note { margin-top: 0.75rem; }
 
 /* Proof figure. One per page, tinted band. */
@@ -317,7 +384,7 @@ dl.skills dd { margin: 0; color: var(--fg-2); }
 /* Hover effects only where a pointer can hover, so touch screens never get a stuck state. */
 @media (hover: hover) {
   .row:hover { background-color: color-mix(in srgb, var(--brand) 7%, transparent); }
-  .apps a:hover { transform: translateY(-3px) scale(1.04); }
+  .apps a:hover { transform: translateY(-4px) scale(1.06); }
 }
 
 /* Reveal on scroll. Only when JS is present, so nothing is ever hidden without it. */
@@ -332,6 +399,8 @@ html.js [data-reveal].in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   html.js [data-reveal] { opacity: 1; transform: none; transition: none; }
+  /* Off, not shortened: an infinite alternate animation at 0.01ms would flicker. */
+  .hero::before, .hero::after { animation: none; }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }
 
@@ -342,6 +411,7 @@ html.js [data-reveal].in { opacity: 1; transform: none; }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   /* Plain token, not color-mix(): an engine without backdrop-filter is older than color-mix() too. */
   .site-header, .btn.ghost, .apps { background: var(--band); }
+  .site-header::before, .btn.ghost::before, .apps::before, .site-header::after, .btn.ghost::after, .apps::after { display: none; }
 }
 
 /* Print, used by the CV page */
@@ -351,7 +421,7 @@ html.js [data-reveal].in { opacity: 1; transform: none; }
   body { color: #000; background: #fff; font-size: 10.5pt; }
   main { padding-top: 0; }
   .hero, .hero.small { padding-block: 0 1rem; }
-  .hero::before { display: none; }
+  .hero::before, .hero::after { display: none; }
   .band, .band.soft, .band.tint { padding-block: 1rem; background: none; }
   .band .h2 { margin-bottom: 0.75rem; }
   .entry { grid-template-columns: 1fr; gap: 0.25rem; padding-block: 0.75rem; }

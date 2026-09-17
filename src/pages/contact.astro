@@ -6,11 +6,11 @@ import Section from '../components/Section.astro';
 import { site } from '../data/profile';
 
 const title = 'Contact';
-const description = 'Contact Sajon Shrestha, Flutter and mobile engineer in Kathmandu, Nepal. Email, LinkedIn, GitHub, ORCID.';
+const description = 'Contact Sajon Shrestha, Flutter and mobile engineer in Kathmandu, Nepal. Email, WhatsApp, LinkedIn, GitHub, ORCID.';
 ---
 
 <Base title={title} description={description}>
-  <Hero small eyebrow="Contact" lede="I am in Kathmandu, Nepal (UTC+5:45) and work with clients in US time zones.">
+  <Hero small eyebrow="Contact" lede="I am in Kathmandu, Nepal (UTC+5:45) and work with clients in US time zones. WhatsApp is fine for a quick message.">
     <Fragment slot="title">
       Email is the fastest.
       <span><a class="email" href={`mailto:${site.email}`}>{site.email}</a></span>
@@ -18,6 +18,7 @@ const description = 'Contact Sajon Shrestha, Flutter and mobile engineer in Kath
     <Fragment slot="actions">
       <a class="link" href={`mailto:${site.email}`}>Email me<span class="arrow">›</span></a>
       <button class="btn ghost copy" type="button" data-copy={site.email}>Copy address</button>
+      <a class="btn ghost" href={site.whatsapp.url} rel="noopener" target="_blank">WhatsApp</a>
     </Fragment>
   </Hero>
 
@@ -27,6 +28,7 @@ const description = 'Contact Sajon Shrestha, Flutter and mobile engineer in Kath
 
   <Section id="elsewhere" heading="Elsewhere">
     <div class="links-list" data-reveal>
+      <a class="link" href={site.whatsapp.url} rel="noopener" target="_blank">WhatsApp {site.whatsapp.number}<span class="arrow">↗</span></a>
       <a class="link" href={site.links.linkedin} rel="me noopener">LinkedIn<span class="arrow">↗</span></a>
       <a class="link" href={site.links.github} rel="me noopener">GitHub<span class="arrow">↗</span></a>
       <a class="link" href={site.links.orcid} rel="me noopener">ORCID<span class="arrow">↗</span></a>

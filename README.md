@@ -131,11 +131,13 @@ qlmanage -t -s 1200 -o /tmp design/og.svg && sips -c 630 1200 /tmp/og.svg.png --
 
 ## Rules
 
-**Content.** Public-safe only: no phone number, no referees, no identity numbers, no install
-figure that is not on a public Google Play listing. Contact email is public by design.
+**Content.** Public-safe only: no referees, no identity numbers, no install figure that is not on
+a public Google Play listing. Contact email and the WhatsApp number in `profile.ts` are public by
+choice; the number stays out of the CV PDF and out of this file.
 
 **Design.** Monochrome plus one accent, type led, one idea per band. No cards, no stat boxes, no
-decorative icons, no timeline dots. Content bands stay flat; the header pill, buttons, the theme
-toggle and the launcher tray use Apple-style glass (blur, a specular rim, a soft shadow), and each
-hero has one low-opacity accent glow behind it. Nothing else is translucent. Sizes are fluid and
-checked down to a 320px phone.
+decorative icons, no timeline dots. Content bands stay flat; the header pill, ghost buttons and
+the launcher tray share one glass recipe in `global.css` (blur, a gradient rim lit from the top
+left, a gloss, a specular that follows the pointer, a drop shadow), and each hero has two slow
+drifting accent glows behind it so the glass has colour to refract. Nothing else is translucent.
+Sizes are fluid and checked down to a 320px phone.
