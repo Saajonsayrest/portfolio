@@ -120,13 +120,30 @@ body::before {
 }
 /* Pointer light. A second, wider glow that trails the pointer across the page: glass.ts eases
    --px/--py on the root and sets html.pointer once a pointer has moved, clearing it when the pointer
-   leaves the window. Never shown on touch. */
+   leaves the window. On touch it rides the scroll instead (below). */
 body::after {
   content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background: radial-gradient(28rem circle at var(--px, 50%) var(--py, 50%), color-mix(in srgb, var(--accent) var(--glow-pointer), transparent), transparent 70%);
   opacity: 0; transition: opacity 0.6s var(--ease);
 }
 html.pointer body::after { opacity: 1; }
+/* Touch: no pointer, so the glow rides the scroll. The pseudo is made larger than the viewport and
+   translated (compositor only) from the top right to the bottom left as the page scrolls; where
+   scroll-driven animations are missing it drifts slowly on its own instead. */
+@media (hover: none) {
+  body::after {
+    opacity: 1; inset: -50vh -50vw;
+    background: radial-gradient(24rem circle at 50% 50%, color-mix(in srgb, var(--accent) var(--glow-pointer), transparent), transparent 70%);
+    animation: glow-ride 40s ease-in-out infinite alternate;
+  }
+  @supports (animation-timeline: scroll()) {
+    body::after { animation: glow-ride linear both; animation-timeline: scroll(root); }
+  }
+}
+@keyframes glow-ride {
+  from { translate: 30vw -30vh; }
+  to { translate: -30vw 30vh; }
+}
 img, svg { max-width: 100%; display: block; }
 h1, h2, h3, h4 { margin: 0; font-weight: 500; line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance; }
 p { margin: 0; }
@@ -426,6 +443,11 @@ dl.skills dd { margin: 0; color: var(--fg-2); }
   .row:hover::before, .row:hover::after { opacity: 1; }
   .apps a:hover { transform: translateY(-4px) scale(1.06); }
 }
+/* Touch states, set by glass.ts: .lit under a finger (tap bloom, the light at the touch point), .near
+   on the tile crossing the middle of the screen (scroll spotlight, the light at its centre). */
+.site-header.lit::after, .btn.ghost.lit::after, .apps.lit::after,
+.row.lit::before, .row.lit::after, .row.near::before, .row.near::after { opacity: 1; }
+.apps a:active { transform: scale(0.92); }
 
 /* Reveal on scroll. Only when JS is present, so nothing is ever hidden without it. */
 html.js [data-reveal] {
@@ -440,6 +462,8 @@ html.js [data-reveal].in { opacity: 1; transform: none; }
   html { scroll-behavior: auto; }
   html.js [data-reveal] { opacity: 1; transform: none; transition: none; }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  /* The touch glow stays put: a 0.01ms alternating loop would jitter. */
+  body::after { animation: none; translate: none; }
 }
 
 /* Glass fallbacks target the surfaces, not :root: a :root override loses to the dark token blocks on specificity. */

@@ -54,7 +54,7 @@ domain, DNS and SSL are configured in the Firebase console, not in this repo.
     ├── layouts/Base.astro  <head>, SEO, theme bootstrap, header, footer, view transitions
     ├── pages/            one file per route: index, work, about, cv, contact, 404
     ├── components/       Header, Footer, Hero, Figure, Section, ProjectRow, Entry, PlayTable
-    ├── scripts/          theme.ts (toggle), reveal.ts (scroll reveal, header hairline)
+    ├── scripts/          theme.ts (toggle), reveal.ts (scroll reveal, header hairline), glass.ts (light)
     └── styles/global.css the whole design system
 ```
 
@@ -143,8 +143,10 @@ one glass recipe in `global.css`, modelled on Apple's Liquid Glass: a clear slab
 A thin fill with a sheen, a light blur, a lit edge (rim, an inner band of bent light, a shadow on
 the far side), a specular that follows the pointer, a drop shadow. The header pill turns milkier
 and blurs more once text scrolls beneath it. One faint, static accent glow sits at the top of every
-page so the pill has colour to bend, and a second, wider one trails the pointer (`glass.ts`, pointer
-devices only). Project rows are tiles: a thin fill on a hairline, lit under the pointer in the
-project's own brand colour (a soft pool inside, the same light on the rim). Nothing else is
-translucent.
+page so the pill has colour to bend, and a second, wider one trails the pointer (`glass.ts`).
+Project rows are tiles: a thin fill on a hairline, lit under the pointer in the project's own brand
+colour (a soft pool inside, the same light on the rim). On touch there is no pointer, so the same
+light answers the finger and the scroll instead: a tap blooms it under the fingertip, the tile
+crossing the middle of the screen stays lit, and the page glow rides the scroll (CSS scroll-driven
+animation, a slow drift where that is missing). Nothing else is translucent.
 Sizes are fluid and checked down to a 320px phone.
