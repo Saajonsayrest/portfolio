@@ -9,7 +9,7 @@ export const site = {
   title: 'Sajon Shrestha, Flutter and mobile engineer, Kathmandu',
   tagline: 'Mobile engineer, Flutter on top and native Kotlin underneath.',
   description:
-    'Sajon Shrestha is a Flutter and mobile engineer in Kathmandu, Nepal. Seven products public on Google Play, one past 100,000 installs. Media playback, subscriptions, release engineering.',
+    'Sajon Shrestha is a Flutter and mobile engineer in Kathmandu, Nepal. Seven products across thirteen Google Play listings, one past 100,000 installs. Media playback, subscriptions, release engineering.',
   url: 'https://sajon.com.np',
   email: 'sajonshrestha5@gmail.com',
   whatsapp: { number: '+977 9867232534', url: 'https://wa.me/9779867232534' },
@@ -30,7 +30,7 @@ export const nav = [
 ];
 
 export const summary = [
-  'Mobile engineer since 2022, Flutter on top and native Kotlin underneath. Seven products public on Google Play, one past 100,000 installs.',
+  'Mobile engineer since 2022, Flutter on top and native Kotlin underneath. Seven products across thirteen Google Play listings, one past 100,000 installs.',
   'I lead mobile delivery for US clients out of Kathmandu, inside a twenty person team, across a twelve hour gap. Client meetings and demos happen on video, in English.',
   'I own the parts teams usually outsource. A forked native video player, subscription billing and the release pipeline itself. Before that, a national internet provider, where a bad release once stopped the support line. That is where the release discipline comes from.',
 ];
@@ -171,11 +171,11 @@ export const projects: Project[] = [
     featured: true,
     icon: '/icons/smartsikshya.png',
     color: '#355C0D', // SmartSikshya lib/core/constants/app_colors.dart primary
-    link: { label: 'Six school apps on Google Play', url: 'https://play.google.com/store/apps/developer?id=SmartSoft+Network' },
+    link: { label: 'Seven listings on Google Play', url: 'https://play.google.com/store/apps/developer?id=SmartSoft+Network' },
     bullets: [
       'Five roles from one codebase. Parent, student, teacher, school admin and a cross-school super admin, which is the multi-tenant control plane.',
       'Live GPS vehicle tracking over WebSockets and role-based access control.',
-      'Automated the white-label flavour scripts, so a new school brand becomes a signed, store-ready build with nobody editing the project by hand. Six school brands ship from that one codebase as their own listings.',
+      'Automated the white-label flavour scripts, so a new school brand becomes a signed, store-ready build with nobody editing the project by hand. Six school brands ship from that one codebase as their own listings, seven with the SmartSikshya base app beside them.',
     ],
   },
   {
@@ -216,13 +216,13 @@ export const playListings = [
   { name: 'Dealer Partner', installs: '1,000+', url: 'https://play.google.com/store/apps/details?id=com.classic.partner.np.app', note: 'Referral and commission app, Flutter', icon: '/icons/dealer-partner.png' },
   { name: 'WiPray', installs: '1,000+', url: 'https://play.google.com/store/apps/details?id=com.wipray.mobile', note: 'Faith social platform, Flutter', icon: '/icons/wipray.png' },
   { name: 'Jeewit Bachan', installs: '1,000+', url: 'https://play.google.com/store/apps/details?id=com.jeewit.bachan', note: 'Devotional audiobooks, React Native', icon: '/icons/jeewit-bachan.png' },
-  { name: 'SmartSikshya', installs: 'six school brands', url: 'https://play.google.com/store/apps/developer?id=SmartSoft+Network', note: 'School platform, Flutter', icon: '/icons/smartsikshya.png' },
+  { name: 'SmartSikshya', installs: 'seven listings', url: 'https://play.google.com/store/apps/developer?id=SmartSoft+Network', note: 'School platform, six school brands plus the base app, Flutter', icon: '/icons/smartsikshya.png' },
 ];
 
 export const services = [
   {
     title: 'Flutter apps, iOS and Android from one codebase',
-    body: 'From a scoped brief to two store listings. Riverpod or Bloc, clean architecture, tested. Seven products of mine are public on Google Play.',
+    body: 'From a scoped brief to two store listings. Riverpod or Bloc, clean architecture, tested. Seven products of mine are public on Google Play, thirteen listings in all.',
   },
   {
     title: 'React Native to Flutter migration',

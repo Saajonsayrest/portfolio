@@ -1,43 +1,31 @@
-// Theme toggle. The inline script in Base.astro applies the stored choice before first paint and
-// again after every view transition; this module only handles the button and keeps labels in sync.
-// A choice that matches the system setting is dropped, so the site follows the system again.
+// Theme toggle. Light is the default. The inline script in Base.astro applies a stored dark
+// choice before first paint and again after every view transition; this module only handles the
+// button and keeps labels in sync. Choosing light clears the key, so light never needs storing.
 
 const KEY = 'theme';
 const COLOURS = { light: '#ffffff', dark: '#000000' } as const;
 type Theme = keyof typeof COLOURS;
 
 const root = document.documentElement;
-const media = window.matchMedia('(prefers-color-scheme: dark)');
-const system = (): Theme => (media.matches ? 'dark' : 'light');
-const current = (): Theme => {
-  const stored = root.dataset.theme;
-  return stored === 'dark' || stored === 'light' ? stored : system();
-};
+const current = (): Theme => (root.dataset.theme === 'dark' ? 'dark' : 'light');
 
 function sync() {
   const theme = current();
-  const stored = root.dataset.theme;
   document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((btn) => {
     btn.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
   });
   document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]').forEach((meta) => {
-    const own: Theme = meta.media.includes('dark') ? 'dark' : 'light';
-    meta.content = COLOURS[stored ? theme : own];
+    meta.content = COLOURS[theme];
   });
 }
 
 function set(theme: Theme) {
   try {
-    if (theme === system()) {
-      localStorage.removeItem(KEY);
-      delete root.dataset.theme;
-    } else {
-      localStorage.setItem(KEY, theme);
-      root.dataset.theme = theme;
-    }
-  } catch {
-    root.dataset.theme = theme;
-  }
+    if (theme === 'dark') localStorage.setItem(KEY, theme);
+    else localStorage.removeItem(KEY);
+  } catch {}
+  if (theme === 'dark') root.dataset.theme = theme;
+  else delete root.dataset.theme;
   sync();
 }
 
@@ -47,5 +35,4 @@ document.addEventListener('click', (event) => {
   set(current() === 'dark' ? 'light' : 'dark');
 });
 
-media.addEventListener('change', sync);
 document.addEventListener('astro:page-load', sync);
